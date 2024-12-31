@@ -9,43 +9,44 @@ import airbnbConfig from 'eslint-config-airbnb-base';
 export default [
   {
     ignores: [
-      '**/node_modules/*',
-      '**/test-results/*',
-      '**/coverage/*',
-      'eslint.config.mjs',
-      'tsconfig.json',
-      '**/test/*',
-      '**/dist/*',
-      '**/build/*',
+      "**/node_modules/*",
+      "**/test-results/*",
+      "**/coverage/*",
+      "eslint.config.mjs",
+      "tsconfig.json",
+      "**/test/*",
+      "**/dist/*",
+      "**/build/*",
     ],
-    files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.jsx'],
+    files: ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"],
     plugins: {
-      '@stylistic/ts': stylisticTs,
-      'simple-import-sort': simpleImportSort,
+      "@stylistic/ts": stylisticTs,
+      "simple-import-sort": simpleImportSort,
       airbnbConfig: airbnbConfig,
     },
 
     languageOptions: {
       parser: tsParser,
-      ecmaVersion: 'latest',
-      sourceType: 'script',
+      ecmaVersion: "latest",
+      sourceType: "script",
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
       },
     },
     rules: {
       ...eslintPluginPrettier.configs.recommended.rules,
-      '@stylistic/ts/comma-dangle': ['error', 'always-multiline'],
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
-      'airbnb-base/arrow-body-style': 'off',
-      'prettier/prettier': [
-        'error',
+      "simple-import-sort/exports": "error",
+      "airbnb-base/arrow-body-style": "off",
+      "prettier/prettier": [
+        "error",
         {
-          singleQuote: true,
-          trailingComma: 'all',
+         
         },
+        {
+          usePrettierrc: true,
+        }
       ],
+ 
     },
   },
   eslint.configs.recommended,
