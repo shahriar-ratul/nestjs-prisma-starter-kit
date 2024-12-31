@@ -47,6 +47,8 @@ export class ValidationExceptionFilter implements ExceptionFilter {
             Object.values(errorMsg ?? {})[0]
         );
         const responseBody = {
+            success: false,
+            statusCode: httpStatus,
             error: err.code,
             message: err.message,
             timestamp: new Date().toISOString(),
