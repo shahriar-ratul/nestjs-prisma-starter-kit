@@ -18,6 +18,11 @@ import { ErrorFilter } from "@/core/filters/error.filter";
 import { ResponseInterceptor } from "@/core/interceptor/response.interceptor";
 import { AllExceptionsFilter, BadRequestExceptionFilter, ForbiddenExceptionFilter, NotFoundExceptionFilter, UnauthorizedExceptionFilter, ValidationExceptionFilter } from "@/core/filters";
 import { LoggerMiddleware } from "@/core/middleware/logger.middleware";
+import { AuthModule } from './modules/auth/auth.module';
+import { AdminsModule } from './modules/admins/admins.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -52,6 +57,16 @@ import { LoggerMiddleware } from "@/core/middleware/logger.middleware";
         limit: 100,
       },
     ]),
+
+    AuthModule,
+
+    AdminsModule,
+
+    RolesModule,
+
+    PermissionsModule,
+
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

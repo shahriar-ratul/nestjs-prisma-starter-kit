@@ -1,16 +1,16 @@
 # To Do
   - [X] eslint 9
   - [x] setup Prisma
-  - [ ] setup swagger
-  - [ ] database for users with role and permission
-  - [ ]  Sign in and sign up via email
+  - [x] setup swagger
+  - [x] database for users with role and permission
+  - [ ] Sign in and sign up via email
   - [ ] docker setup
   - [ ] validation via DTO
   - [ ] redis cache
   - [ ] health check
   - [ ] jwt auth with passport
   - [ ] sending email
-  - [ ] seeding
+  - [x] seeding
   - [ ] social sign in
   - [ ] Internationalization/Translations (I18N) [nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n).
   - [ ]  File uploads. Support local and Amazon S3 drivers.
