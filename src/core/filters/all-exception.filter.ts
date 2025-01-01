@@ -1,11 +1,4 @@
-import {
-  type ArgumentsHost,
-  Catch,
-  type ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from "@nestjs/common";
+import { type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger } from "@nestjs/common";
 // biome-ignore lint/style/useImportType: <explanation>
 import { HttpAdapterHost } from "@nestjs/core";
 
@@ -42,10 +35,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
-    const httpStatus =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     const request = ctx.getRequest();
     // Construct the response body.
@@ -54,12 +44,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode: httpStatus,
       error: exception.code,
       message: exception.message,
-      description: exception.description ,
+      description: exception.description,
       timestamp: new Date().toISOString(),
       traceId: request.id,
     };
 
-       
     // Send the HTTP response.
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }

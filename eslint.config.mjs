@@ -1,13 +1,14 @@
 import eslint from '@eslint/js';
 import stylisticTs from '@stylistic/eslint-plugin-ts';
 import tsParser from '@typescript-eslint/parser';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 import airbnbConfig from 'eslint-config-airbnb-base';
 export default [
     eslint.configs.recommended,
   ...tseslint.configs.recommended,
+  eslintPluginPrettierRecommended,
   {
     ignores: [
       "**/node_modules/*",
@@ -35,20 +36,17 @@ export default [
       },
     },
     rules: {
-      ...eslintPluginPrettier.configs.recommended.rules,
+      "prettier/prettier": [
+        "error",
+        {},
+        {
+          "usePrettierrc": true,
+        }
+      ],
       "simple-import-sort/exports": "error",
       "airbnb-base/arrow-body-style": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "prettier/prettier": [
-        "error",
-        {
-         
-        },
-        {
-          usePrettierrc: true,
-        }
-      ],
- 
+      "@typescript-eslint/no-unused-vars": "warn",
     },
   },
 

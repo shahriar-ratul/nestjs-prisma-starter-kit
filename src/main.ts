@@ -1,13 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { config as dotenvConfig } from "dotenv";
-import {
-  Logger,
-  RequestMethod,
-  ValidationPipe,
-  VERSION_NEUTRAL,
-  VersioningType,
-} from "@nestjs/common";
+import { Logger, RequestMethod, ValidationPipe, VERSION_NEUTRAL, VersioningType } from "@nestjs/common";
 import { join } from "path";
 
 import * as cookieParser from "cookie-parser";

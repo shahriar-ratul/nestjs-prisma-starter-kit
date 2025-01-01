@@ -44,15 +44,18 @@ export const permissionData = [
     name: "Role Create",
     slug: "role.create",
     group: "role",
-  }, {
+  },
+  {
     name: "Role Update",
     slug: "role.update",
     group: "role",
-  }, {
+  },
+  {
     name: "Role Delete",
     slug: "role.delete",
     group: "role",
-  }, {
+  },
+  {
     name: "Role Status",
     slug: "role.status",
     group: "role",
@@ -80,9 +83,6 @@ export const permissionData = [
     group: "permission",
   },
 
-
-
-
   // profile
   {
     name: "Profile View",
@@ -95,9 +95,4 @@ export const permissionData = [
     slug: "profile.update",
     group: "profile",
   },
-
-
-
-
-
 ];

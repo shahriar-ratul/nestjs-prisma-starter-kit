@@ -103,7 +103,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "prettier --write",
+      "pnpm format",
       "eslint --max-warnings 0 .",
       "pnpm lint"
     ]

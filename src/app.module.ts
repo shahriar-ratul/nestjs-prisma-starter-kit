@@ -1,10 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  ValidationError,
-  ValidationPipe,
-} from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule, ValidationError, ValidationPipe } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { PrismaModule } from "./modules/prisma/prisma.module";
@@ -16,13 +10,20 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE, Reflector } from "@nestjs/core";
 import { ErrorFilter } from "@/core/filters/error.filter";
 import { ResponseInterceptor } from "@/core/interceptor/response.interceptor";
-import { AllExceptionsFilter, BadRequestExceptionFilter, ForbiddenExceptionFilter, NotFoundExceptionFilter, UnauthorizedExceptionFilter, ValidationExceptionFilter } from "@/core/filters";
+import {
+  AllExceptionsFilter,
+  BadRequestExceptionFilter,
+  ForbiddenExceptionFilter,
+  NotFoundExceptionFilter,
+  UnauthorizedExceptionFilter,
+  ValidationExceptionFilter,
+} from "@/core/filters";
 import { LoggerMiddleware } from "@/core/middleware/logger.middleware";
-import { AuthModule } from './modules/auth/auth.module';
-import { AdminsModule } from './modules/admins/admins.module';
-import { RolesModule } from './modules/roles/roles.module';
-import { PermissionsModule } from './modules/permissions/permissions.module';
-import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from "./modules/auth/auth.module";
+import { AdminsModule } from "./modules/admins/admins.module";
+import { RolesModule } from "./modules/roles/roles.module";
+import { PermissionsModule } from "./modules/permissions/permissions.module";
+import { UsersModule } from "./modules/users/users.module";
 
 @Module({
   imports: [
