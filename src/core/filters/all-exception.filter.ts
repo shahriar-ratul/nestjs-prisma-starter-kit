@@ -27,8 +27,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // Log the exception.
     this.logger.error(exception);
 
-    console.dir(exception);
-
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
@@ -39,11 +37,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const request = ctx.getRequest();
     // Construct the response body.
+
+    let message = exception.message;
+    if (exception instanceof HttpException) {
+      const response = exception.getResponse() as any;
+      message = response.message || exception.message;
+    }
+
     const responseBody = {
       success: false,
       statusCode: httpStatus,
-      error: exception.code,
-      message: exception.message,
+      message: message,
       description: exception.description,
       timestamp: new Date().toISOString(),
       traceId: request.id,

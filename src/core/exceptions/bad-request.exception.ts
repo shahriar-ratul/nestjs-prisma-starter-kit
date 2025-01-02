@@ -6,15 +6,13 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-// Import internal modules
-import { ExceptionConstants } from "../constants/exceptions.constants";
 import type { IException, IHttpBadRequestExceptionResponse } from "./../interfaces/exceptions.interface";
 
 export class BadRequestException extends HttpException {
   @ApiProperty({
-    enum: ExceptionConstants.BadRequestCodes,
+    enum: HttpStatus,
     description: "A unique code identifying the error.",
-    example: ExceptionConstants.BadRequestCodes.VALIDATION_ERROR,
+    example: HttpStatus.BAD_REQUEST,
   })
   code: number; // Internal status code
 
@@ -98,7 +96,8 @@ export class BadRequestException extends HttpException {
   static HTTP_REQUEST_TIMEOUT = () => {
     return new BadRequestException({
       message: "HTTP Request Timeout",
-      code: ExceptionConstants.BadRequestCodes.HTTP_REQUEST_TIMEOUT,
+      description: "The server timed out while waiting for the request.",
+      code: HttpStatus.REQUEST_TIMEOUT,
     });
   };
 
@@ -110,7 +109,8 @@ export class BadRequestException extends HttpException {
   static RESOURCE_ALREADY_EXISTS = (msg?: string) => {
     return new BadRequestException({
       message: msg || "Resource Already Exists",
-      code: ExceptionConstants.BadRequestCodes.RESOURCE_ALREADY_EXISTS,
+      description: "The requested resource already exists.",
+      code: HttpStatus.BAD_REQUEST,
     });
   };
 
@@ -122,7 +122,8 @@ export class BadRequestException extends HttpException {
   static RESOURCE_NOT_FOUND = (msg?: string) => {
     return new BadRequestException({
       message: msg || "Resource Not Found",
-      code: ExceptionConstants.BadRequestCodes.RESOURCE_NOT_FOUND,
+      description: "The requested resource was not found.",
+      code: HttpStatus.BAD_REQUEST,
     });
   };
 
@@ -134,7 +135,8 @@ export class BadRequestException extends HttpException {
   static VALIDATION_ERROR = (msg?: string) => {
     return new BadRequestException({
       message: msg || "Validation Error",
-      code: ExceptionConstants.BadRequestCodes.VALIDATION_ERROR,
+      description: "Validation Error",
+      code: HttpStatus.BAD_REQUEST,
     });
   };
 
@@ -146,7 +148,8 @@ export class BadRequestException extends HttpException {
   static UNEXPECTED = (msg?: string) => {
     return new BadRequestException({
       message: msg || "Unexpected Error",
-      code: ExceptionConstants.BadRequestCodes.UNEXPECTED_ERROR,
+      description: "An unexpected error occurred while processing the request.",
+      code: HttpStatus.BAD_REQUEST,
     });
   };
 
@@ -158,7 +161,8 @@ export class BadRequestException extends HttpException {
   static INVALID_INPUT = (msg?: string) => {
     return new BadRequestException({
       message: msg || "Invalid Input",
-      code: ExceptionConstants.BadRequestCodes.INVALID_INPUT,
+      description: "Invalid Input",
+      code: HttpStatus.BAD_REQUEST,
     });
   };
 }

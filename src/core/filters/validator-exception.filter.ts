@@ -2,52 +2,64 @@ import { type ArgumentsHost, Catch, type ExceptionFilter, HttpStatus, Logger } f
 // biome-ignore lint/style/useImportType: <explanation>
 import { HttpAdapterHost } from "@nestjs/core";
 import { ValidationError } from "class-validator";
-
 import { BadRequestException } from "../exceptions/bad-request.exception";
 
-/**
- * An exception filter to handle validation errors thrown by class-validator.
- */
 @Catch(ValidationError)
 export class ValidationExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(ValidationExceptionFilter.name);
 
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-  /**
-   * Handle a validation error.
-   * @param exception The validation error object.
-   * @param host The arguments host object.
-   */
   catch(exception: ValidationError, host: ArgumentsHost): void {
-    this.logger.verbose(exception);
-
-    // In certain situations `httpAdapter` might not be available in the
-    // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
-
     const ctx = host.switchToHttp();
+    const request = ctx.getRequest();
     const httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
 
-    const request = ctx.getRequest();
-    // Example of fetching path to attach path inside response object
-    // const path = httpAdapter.getRequestUrl(request);
+    // Extract all validation error messages
+    const errorMessages = this.extractErrors(exception);
+    const path = httpAdapter.getRequestUrl(request);
 
-    const errorMsg = exception.constraints || exception.children?.[0]?.constraints;
-
-    // Create a new BadRequestException with the validation error message.
-    const err = BadRequestException.VALIDATION_ERROR(Object.values(errorMsg ?? {})[0]);
+    // Create a custom error response
+    const err = BadRequestException.VALIDATION_ERROR("Validation errors occurred");
     const responseBody = {
       success: false,
       statusCode: httpStatus,
-      error: err.code,
-      message: err.message,
+      description: err.description,
+      message: errorMessages,
       timestamp: new Date().toISOString(),
-      traceId: request.id,
+      traceId: request.id, // Ensure `traceId` exists in the request
+      path,
     };
 
-    // Uses the HTTP adapter to send the response with the constructed response body
-    // and the HTTP status code.
+    // Log the validation errors and the request path
+    this.logger.verbose(`Validation errors: ${errorMessages.join(", ")}`);
+    this.logger.verbose(`Request path: ${path}`);
+
+    // Send the custom error response
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
+  }
+
+  /**
+   * Recursively extracts all validation error messages.
+   * @param exception - The validation error object.
+   * @returns An array of error messages.
+   */
+  private extractErrors(exception: ValidationError): string[] {
+    const errors: string[] = [];
+
+    if (exception.constraints) {
+      // Add all constraint messages
+      errors.push(...Object.values(exception.constraints));
+    }
+
+    if (exception.children && exception.children.length > 0) {
+      // Recursively extract errors from child validations
+      for (const child of exception.children) {
+        errors.push(...this.extractErrors(child));
+      }
+    }
+
+    return errors;
   }
 }

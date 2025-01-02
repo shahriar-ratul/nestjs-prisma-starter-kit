@@ -1,4 +1,13 @@
-import { MiddlewareConsumer, Module, NestModule, ValidationError, ValidationPipe } from "@nestjs/common";
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  ValidationError,
+  ValidationPipe,
+} from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { PrismaModule } from "./modules/prisma/prisma.module";
@@ -7,7 +16,7 @@ import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE, Reflector } from "@nestjs/core";
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, Reflector } from "@nestjs/core";
 import { ErrorFilter } from "@/core/filters/error.filter";
 import { ResponseInterceptor } from "@/core/interceptor/response.interceptor";
 import {
@@ -24,6 +33,9 @@ import { AdminsModule } from "./modules/admins/admins.module";
 import { RolesModule } from "./modules/roles/roles.module";
 import { PermissionsModule } from "./modules/permissions/permissions.module";
 import { UsersModule } from "./modules/users/users.module";
+import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth.guard";
+import { JwtModule } from "@nestjs/jwt";
+import { RequestLoggerMiddleware } from "@/core/middleware/request-logger.middleware";
 
 @Module({
   imports: [
@@ -68,12 +80,13 @@ import { UsersModule } from "./modules/users/users.module";
     PermissionsModule,
 
     UsersModule,
+    JwtModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
-      provide: "APP_GUARD",
+      provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
 
@@ -85,22 +98,31 @@ import { UsersModule } from "./modules/users/users.module";
       provide: APP_FILTER,
       useClass: ErrorFilter,
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+
     { provide: APP_FILTER, useClass: ValidationExceptionFilter },
     { provide: APP_FILTER, useClass: BadRequestExceptionFilter },
     { provide: APP_FILTER, useClass: UnauthorizedExceptionFilter },
     { provide: APP_FILTER, useClass: ForbiddenExceptionFilter },
     { provide: APP_FILTER, useClass: NotFoundExceptionFilter },
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
     {
       provide: APP_PIPE,
       useFactory: () =>
         new ValidationPipe({
           exceptionFactory: (errors: ValidationError[]) => {
-            return errors[0];
+            // return errors[0];
+            const allErrors = errors.flatMap((error) => Object.values(error.constraints || {}));
+            return new HttpException(
+              {
+                message: allErrors,
+                // errors: allErrors,
+              },
+              HttpStatus.UNPROCESSABLE_ENTITY,
+            );
           },
         }),
     },
@@ -112,5 +134,6 @@ import { UsersModule } from "./modules/users/users.module";
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes("*");
+    consumer.apply(RequestLoggerMiddleware).forRoutes("*");
   }
 }

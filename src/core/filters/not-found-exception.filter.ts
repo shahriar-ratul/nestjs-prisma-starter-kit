@@ -47,7 +47,6 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const responseBody = {
       success: false,
       statusCode: httpStatus,
-      error: exception.code,
       message: exception.message,
       description: exception.description,
       traceId: request.id,

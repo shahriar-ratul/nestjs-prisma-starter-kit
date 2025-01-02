@@ -2,15 +2,14 @@ import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 // Import internal files & modules
-import { ExceptionConstants } from "../constants/exceptions.constants";
 import type { IException, IHttpInternalServerErrorExceptionResponse } from "./../interfaces/exceptions.interface";
 
 // Exception class for Internal Server Error
 export class InternalServerErrorException extends HttpException {
   @ApiProperty({
-    enum: ExceptionConstants.InternalServerErrorCodes,
+    enum: HttpStatus,
     description: "A unique code identifying the error.",
-    example: ExceptionConstants.InternalServerErrorCodes.INTERNAL_SERVER_ERROR,
+    example: HttpStatus.INTERNAL_SERVER_ERROR,
   })
   code: number; // Internal status code
 
@@ -97,7 +96,9 @@ export class InternalServerErrorException extends HttpException {
     return new InternalServerErrorException({
       message:
         "We are sorry, something went wrong on our end. Please try again later or contact our support team for assistance.",
-      code: ExceptionConstants.InternalServerErrorCodes.INTERNAL_SERVER_ERROR,
+      code: HttpStatus.INTERNAL_SERVER_ERROR,
+      description:
+        "The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.",
       cause: error,
     });
   };
@@ -110,8 +111,10 @@ export class InternalServerErrorException extends HttpException {
   static UNEXPECTED_ERROR = (error: any) => {
     return new InternalServerErrorException({
       message: "An unexpected error occurred while processing the request.",
-      code: ExceptionConstants.InternalServerErrorCodes.UNEXPECTED_ERROR,
+      code: HttpStatus.INTERNAL_SERVER_ERROR,
       cause: error,
+      description:
+        "The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.",
     });
   };
 }

@@ -6,8 +6,6 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-// Import internal modules
-import { ExceptionConstants } from "../constants/exceptions.constants";
 import type { IException, IHttpForbiddenExceptionResponse } from "./../interfaces/exceptions.interface";
 
 /**
@@ -16,9 +14,9 @@ import type { IException, IHttpForbiddenExceptionResponse } from "./../interface
 export class ForbiddenException extends HttpException {
   /** The error code. */
   @ApiProperty({
-    enum: ExceptionConstants.ForbiddenCodes,
+    enum: HttpStatus,
     description: "You do not have permission to perform this action.",
-    example: ExceptionConstants.ForbiddenCodes.MISSING_PERMISSIONS,
+    example: HttpStatus.FORBIDDEN,
   })
   code: number;
 
@@ -108,7 +106,8 @@ export class ForbiddenException extends HttpException {
   static FORBIDDEN = (msg?: string) => {
     return new ForbiddenException({
       message: msg || "Access to this resource is forbidden.",
-      code: ExceptionConstants.ForbiddenCodes.FORBIDDEN,
+      description: "You do not have permission to access this resource.",
+      code: HttpStatus.FORBIDDEN,
     });
   };
 
@@ -120,7 +119,8 @@ export class ForbiddenException extends HttpException {
   static MISSING_PERMISSIONS = (msg?: string) => {
     return new ForbiddenException({
       message: msg || "You do not have permission to perform this action.",
-      code: ExceptionConstants.ForbiddenCodes.MISSING_PERMISSIONS,
+      description: "You do not have the necessary permissions to perform this action.",
+      code: HttpStatus.FORBIDDEN,
     });
   };
 }

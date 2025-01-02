@@ -13,9 +13,10 @@
   - [x] seeding
   - [ ] social sign in
   - [ ] Internationalization/Translations (I18N) [nestjs-i18n](https://www.npmjs.com/package/nestjs-i18n).
-  - [ ]  File uploads. Support local and Amazon S3 drivers.
-  - [ ]  CI (Github Actions).
-  - [ ]  E2E and units tests.
+  - [ ] File uploads. Support local and Amazon S3 drivers.
+  - [ ] CI (Github Actions).
+  - [ ] E2E and units tests.
+  - [ ] k6 load test
  
 
 ## Description
