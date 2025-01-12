@@ -10,13 +10,14 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
       map((data) => ({
         statusCode: 200,
         success: true,
-        data,
+        data: data,
       })),
     );
   }
 }
 
 export interface Response<T> {
+  statusCode: number;
   success: boolean;
   data: T;
 }

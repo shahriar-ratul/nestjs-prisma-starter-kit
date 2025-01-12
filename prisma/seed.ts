@@ -106,7 +106,9 @@ async function main() {
       const roles = await prisma.role.findMany({
         where: {
           NOT: {
-            slug: "streamer",
+            slug: {
+              in: ["admin", "user"],
+            },
           },
         },
       });
@@ -122,6 +124,40 @@ async function main() {
           });
         }),
       );
+    }
+
+    if (admin.username === "admin") {
+      const adminRole = await prisma.role.findFirst({
+        where: {
+          slug: "admin",
+        },
+      });
+
+      if (adminRole) {
+        await prisma.adminRole.create({
+          data: {
+            adminId: admin.id,
+            roleId: adminRole.id,
+          },
+        });
+      }
+    }
+
+    if (admin.username === "user") {
+      const userRole = await prisma.role.findFirst({
+        where: {
+          slug: "user",
+        },
+      });
+
+      if (userRole) {
+        await prisma.adminRole.create({
+          data: {
+            adminId: admin.id,
+            roleId: userRole.id,
+          },
+        });
+      }
     }
 
     console.log(`Created admin with email: ${email}`);
@@ -141,7 +177,7 @@ async function main() {
 
     const userRole = await prisma.role.findFirst({
       where: {
-        slug: "streamer",
+        slug: "user",
       },
     });
 
@@ -155,7 +191,7 @@ async function main() {
     }
 
     // make
-    console.log(`Created streamer with email: ${user.email}`);
+    console.log(`Created user role with email: ${user.email}`);
   }
 
   console.log("Seeding finished.");

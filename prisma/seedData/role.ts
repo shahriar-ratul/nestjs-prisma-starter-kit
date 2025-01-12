@@ -7,11 +7,12 @@ export const roleData = [
   },
 
   {
-    name: "streamer",
-    slug: "streamer",
-    description: "streamer Role",
+    name: "admin",
+    slug: "admin",
+    description: "Admin Role",
     percentage: 30,
   },
+
   {
     name: "user",
     slug: "user",

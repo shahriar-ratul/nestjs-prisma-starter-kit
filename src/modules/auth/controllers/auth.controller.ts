@@ -1,20 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpCode,
-  HttpStatus,
-  Req,
-  UseGuards,
-  Request,
-} from "@nestjs/common";
-import { AuthService } from "./auth.service";
-import { LoginDto } from "./dto/login.dto";
-import { RegisterDto } from "./dto/register.dto";
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, Req, UseGuards, Request } from "@nestjs/common";
+import { AuthService } from "../services/auth.service";
+import { LoginDto } from "../dto/login.dto";
+import { RegisterDto } from "../dto/register.dto";
 import { SkipThrottle } from "@nestjs/throttler";
 import { ApiResponse } from "@nestjs/swagger";
 import { Public } from "@/core/decorator";
@@ -26,38 +13,27 @@ import { Request as TypeRequest } from "express";
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: LoginDto) {
-    return this._authService.create(createAuthDto);
-  }
-
-  @Get()
-  findAll() {
-    return this._authService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this._authService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateAuthDto: RegisterDto) {
-    return this._authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this._authService.remove(+id);
+  @HttpCode(HttpStatus.OK)
+  @Post("register")
+  register(@Body() registerDto: RegisterDto) {
+    return this._authService.register(registerDto);
   }
 
   // @SkipThrottle()
-  // @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post("login")
   @ApiResponse({
     status: 200,
-    description: "Login Successful",
+    description: "Login success Response",
+    example: {
+      statusCode: 200,
+      success: true,
+      data: {
+        accessToken: "string",
+        refreshToken: "string",
+        expiresIn: "number",
+      },
+    },
   })
   @Public()
   async login(

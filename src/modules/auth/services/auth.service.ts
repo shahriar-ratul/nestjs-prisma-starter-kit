@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
-import { LoginDto } from "./dto/login.dto";
-import { RegisterDto } from "./dto/register.dto";
+import { LoginDto } from "../dto/login.dto";
+import { RegisterDto } from "../dto/register.dto";
 import { PrismaService } from "@/modules/prisma/prisma.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { TokenService } from "@/modules/auth/token/token.service";
+import { TokenService } from "@/modules/auth/services/token.service";
 
 import { Request } from "express";
 
@@ -18,28 +18,70 @@ export class AuthService {
     private tokenService: TokenService,
   ) {}
 
-  create(createAuthDto: LoginDto) {
-    return "This action adds a new auth";
-  }
+  async register(registerDto: RegisterDto) {
+    const { username, email, password } = registerDto;
+    if (!username || !email || !password) {
+      throw new BadRequestException("Username, Email, Password is required");
+    }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+    const checkUsername = await this._prisma.admin.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    if (checkUsername) {
+      throw new BadRequestException("Username is already taken");
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    const checkEmail = await this._prisma.admin.findFirst({
+      where: {
+        email: email,
+      },
+    });
 
-  update(id: number, updateAuthDto: RegisterDto) {
-    return `This action updates a #${id} auth`;
-  }
+    if (checkEmail) {
+      throw new BadRequestException("Email is already taken");
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    const checkMobile = await this._prisma.admin.findFirst({
+      where: {
+        mobile: registerDto.mobile,
+      },
+    });
+
+    if (checkMobile) {
+      throw new BadRequestException("Mobile is already taken");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const admin = await this._prisma.admin.create({
+      data: {
+        firstName: registerDto.firstName,
+        lastName: registerDto.lastName,
+        dob: undefined,
+        mobile: registerDto.mobile,
+        username: username,
+        email: email,
+        password: hashedPassword,
+        joinedDate: new Date(),
+        gender: registerDto.gender,
+        isActive: true,
+      },
+    });
+
+    return {
+      message: "Register successfully",
+      data: admin,
+    };
   }
 
   async findAdmin(id: number) {
-    return `This action removes a #${id} auth`;
+    return await this._prisma.admin.findFirst({
+      where: {
+        id: id,
+      },
+    });
   }
 
   async findAdminByUsername(username: string) {
@@ -147,11 +189,23 @@ export class AuthService {
         userAgent: request.headers["user-agent"] || "",
         expires_at: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       });
-
-      console.log(data);
     } catch (error) {
       console.log(error);
       throw new BadRequestException("Failed to create token");
+    }
+
+    try {
+      await this._prisma.admin.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          lastLogin: new Date(),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Failed to update last login");
     }
 
     return {
@@ -179,16 +233,6 @@ export class AuthService {
     return user;
   }
 
-  async verifyJwt(jwt: string) {
-    const { exp } = await this.jwtService.verifyAsync(jwt);
-
-    if (exp < Date.now()) {
-      throw new Error("Token expired");
-    }
-
-    return { exp };
-  }
-
   async getProfile(req: Request): Promise<any> {
     try {
       const id = (req.user as any).id as number;
@@ -206,6 +250,10 @@ export class AuthService {
 
     if (!user) {
       throw new Error("invalid credentials");
+    }
+
+    if (user.isActive === false) {
+      throw new BadRequestException("Your Have Been Blocked. Please Contact Admin");
     }
 
     return {

@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from "@
 import { Reflector } from "@nestjs/core";
 import { AbilityFactory } from "./ability.factory";
 import { IS_PUBLIC_KEY } from "@/core/decorator";
-import { AuthService } from "@/modules/auth/auth.service";
+import { AuthService } from "@/modules/auth/services/auth.service";
 
 @Injectable()
 export class AbilityGuard implements CanActivate {

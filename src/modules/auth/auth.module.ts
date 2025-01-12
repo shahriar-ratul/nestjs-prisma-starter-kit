@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { AuthService } from "./auth.service";
-import { AuthController } from "./auth.controller";
-import { TokenService } from "@/modules/auth/token/token.service";
-import { TokenController } from "@/modules/auth/token/token.controller";
+import { AuthService } from "./services/auth.service";
+import { AuthController } from "./controllers/auth.controller";
+import { TokenService } from "@/modules/auth/services/token.service";
+import { TokenController } from "@/modules/auth/controllers/token.controller";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "@/modules/auth/strategies/jwt-strategy";
 import { ConfigModule, ConfigService } from "@nestjs/config";

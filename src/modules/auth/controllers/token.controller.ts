@@ -1,7 +1,7 @@
 import { PageDto, PageOptionsDto } from "@/core/dto";
 import { CreateTokenDto } from "@/modules/auth/dto/create-token.dto";
 import { UpdateTokenDto } from "@/modules/auth/dto/update-token.dto";
-import { TokenService } from "@/modules/auth/token/token.service";
+import { TokenService } from "@/modules/auth/services/token.service";
 import { Controller, Get, Post, Body, Patch, Param, Delete, SetMetadata, Query } from "@nestjs/common";
 import { ApiResponse } from "@nestjs/swagger";
 import { AdminToken } from "@prisma/client";

@@ -6,9 +6,6 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 import airbnbConfig from 'eslint-config-airbnb-base';
 export default [
-    eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  eslintPluginPrettierRecommended,
   {
     ignores: [
       "**/node_modules/*",
@@ -19,7 +16,16 @@ export default [
       "**/test/*",
       "**/dist/*",
       "**/build/*",
-    ],
+      // "**/test/*.spec.ts",
+      "*.spec.ts",
+      "*.e2e-spec.ts",
+      "**/test/*.e2e-spec.ts",
+    ]
+  },
+    eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  eslintPluginPrettierRecommended,
+  {
     files: ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"],
     plugins: {
       "@stylistic/ts": stylisticTs,
@@ -43,11 +49,13 @@ export default [
           "usePrettierrc": true,
         }
       ],
+      "no-unused-vars": "off",
       "simple-import-sort/exports": "error",
       "airbnb-base/arrow-body-style": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "warn",
     },
   },
+  
 
 ];

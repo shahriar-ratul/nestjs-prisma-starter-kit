@@ -42,6 +42,7 @@ async function bootstrap() {
     exclude: [
       { path: "/", method: RequestMethod.GET },
       { path: "docs", method: RequestMethod.GET },
+      { path: "health", method: RequestMethod.GET },
       { path: "public/*", method: RequestMethod.GET },
     ],
   });

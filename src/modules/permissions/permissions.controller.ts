@@ -3,7 +3,7 @@ import { PermissionsService } from "./permissions.service";
 import { CreatePermissionDto } from "./dto/create-permission.dto";
 import { UpdatePermissionDto } from "./dto/update-permission.dto";
 
-@Controller("permissions")
+@Controller({ version: "1", path: "permissions" })
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 

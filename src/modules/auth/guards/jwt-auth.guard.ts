@@ -8,9 +8,9 @@ import { IS_PUBLIC_KEY } from "@/core/decorator";
 import "dotenv/config";
 
 import { Request } from "express";
-import { TokenService } from "@/modules/auth/token/token.service";
+import { TokenService } from "@/modules/auth/services/token.service";
 import { PrismaService } from "@/modules/prisma/prisma.service";
-import { AuthService } from "@/modules/auth/auth.service";
+import { AuthService } from "@/modules/auth/services/auth.service";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {

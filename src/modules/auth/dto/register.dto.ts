@@ -25,10 +25,6 @@ export class RegisterDto {
 
   @IsNotEmpty()
   @IsString()
-  type: string;
-
-  @IsNotEmpty()
-  @IsString()
   gender: string;
 
   @IsNotEmpty()
