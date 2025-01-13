@@ -53,6 +53,48 @@ describe('AdminsController', () => {
       deleteMany: jest.fn(),
     }
   };
+
+  const mockAdminsData = {
+    "id": 13,
+    "firstName": null,
+    "lastName": null,
+    "dob": null,
+    "mobile": null,
+    "username": "Dillan8",
+    "email": "Ova.Durgan@hotmail.com",
+    "photo": null,
+    "joinedDate": "2025-01-03T21:33:50.432Z",
+    "gender": null,
+    "lastLogin": null,
+    "isVerified": false,
+    "verifiedAt": null,
+    "verifiedByEmail": false,
+    "verifiedByMobile": false,
+    "isActive": true,
+    "createdAt": "2025-01-03T21:33:50.432Z",
+    "updatedAt": "2025-01-03T21:33:50.432Z",
+    "deleted": false,
+    "deletedBy": null,
+    "deletedAt": null,
+    "roles": [
+      {
+        "roleId": 3,
+        "adminId": 13,
+        "createdAt": "2025-01-03T21:33:50.435Z",
+        "updatedAt": "2025-01-03T21:33:50.435Z",
+        "role": {
+          "id": 3,
+          "name": "user",
+          "slug": "user",
+          "description": "user Role",
+          "isActive": true,
+          "createdAt": "2025-01-03T21:33:27.388Z",
+          "updatedAt": "2025-01-03T21:33:27.388Z",
+          "percentage": 50
+        }
+      }
+    ]
+  };
   
 
 

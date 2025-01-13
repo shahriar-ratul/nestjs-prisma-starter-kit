@@ -58,7 +58,6 @@ const deleteFile = (path: string) => {
 export class AdminsController {
   constructor(private readonly _adminsService: AdminsService) {}
 
-  @Public()
   @Get()
   @ApiResponse({
     status: 200,
@@ -69,7 +68,6 @@ export class AdminsController {
     return await this._adminsService.findAll(pageOptionsDto);
   }
 
-  @Public()
   @Post()
   @ApiResponse({
     status: 201,

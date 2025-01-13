@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, HttpCode, HttpStatus, Req, UseGuards, Request } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Req,
+  UseGuards,
+  Request,
+  VERSION_NEUTRAL,
+} from "@nestjs/common";
 import { AuthService } from "../services/auth.service";
 import { LoginDto } from "../dto/login.dto";
 import { RegisterDto } from "../dto/register.dto";
@@ -6,20 +17,19 @@ import { SkipThrottle } from "@nestjs/throttler";
 import { ApiResponse } from "@nestjs/swagger";
 import { Public } from "@/core/decorator";
 import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth.guard";
-
 import { Request as TypeRequest } from "express";
 
-@Controller("auth")
+@Controller({ version: VERSION_NEUTRAL, path: "auth" })
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post("register")
   register(@Body() registerDto: RegisterDto) {
     return this._authService.register(registerDto);
   }
 
-  // @SkipThrottle()
   @HttpCode(HttpStatus.OK)
   @Post("login")
   @ApiResponse({

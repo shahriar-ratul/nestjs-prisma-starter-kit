@@ -59,7 +59,7 @@ export class AuthService {
       data: {
         firstName: registerDto.firstName,
         lastName: registerDto.lastName,
-        dob: undefined,
+        dob: registerDto.dob,
         mobile: registerDto.mobile,
         username: username,
         email: email,

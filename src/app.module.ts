@@ -42,10 +42,10 @@ import { RequestLoggerMiddleware } from "@/core/middleware/request-logger.middle
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ".env",
+      envFilePath: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
     }),
     MulterModule.register({
-      dest: "./public",
+      dest: process.env.NODE_ENV === "test" ? "./public.test" : "./public",
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "..", "public"),

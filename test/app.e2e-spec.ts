@@ -16,6 +16,22 @@ describe("AppController (e2e)", () => {
   });
 
   it("/ (GET)", () => {
-    return request(app.getHttpServer()).get("/").expect(200).expect("Hello World!");
+    const responseBody = {
+      statusCode: 200,
+      success: true,
+      data: { message: "Hello World!" },
+    };
+
+    return request(app.getHttpServer()).get("/").expect(200).expect(responseBody);
+  });
+
+  it("/health (GET)", () => {
+    const responseBody = {
+      statusCode: 200,
+      success: true,
+      data: "OK",
+    };
+
+    return request(app.getHttpServer()).get("/health").expect(200).expect(responseBody);
   });
 });
