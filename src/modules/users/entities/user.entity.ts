@@ -1,7 +1,8 @@
-import { Customer } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Exclude } from "class-transformer";
 
-export class UserEntity implements Customer {
+export class UserEntity implements User {
+  phone: string;
   id: number;
   firstName: string;
   lastName: string;

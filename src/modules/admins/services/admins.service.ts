@@ -21,7 +21,7 @@ export class AdminsService {
     const order = query.order || "asc";
     const queryData: Prisma.AdminFindManyArgs = {
       where: {
-        OR: [{ email: { contains: search } }, { username: { contains: search } }, { mobile: { contains: search } }],
+        OR: [{ email: { contains: search } }, { username: { contains: search } }, { phone: { contains: search } }],
       },
       include: {
         roles: {
@@ -67,7 +67,7 @@ export class AdminsService {
   async create(createAdminDto: CreateAdminDto, file: Express.Multer.File) {
     const checkAdmin = await this._prisma.admin.findFirst({
       where: {
-        OR: [{ email: createAdminDto.email }, { username: createAdminDto.username }, { mobile: createAdminDto.mobile }],
+        OR: [{ email: createAdminDto.email }, { username: createAdminDto.username }, { phone: createAdminDto.mobile }],
       },
     });
 
@@ -83,7 +83,7 @@ export class AdminsService {
         lastName: createAdminDto.lastName,
         email: createAdminDto.email,
         username: createAdminDto.username,
-        mobile: createAdminDto.mobile,
+        phone: createAdminDto.mobile,
         password: createPassword,
         isActive: createAdminDto.isActive,
         photo: file ? file.path : null,
@@ -194,7 +194,7 @@ export class AdminsService {
         NOT: {
           id: id,
         },
-        OR: [{ email: updateAdminDto.email }, { username: updateAdminDto.username }, { mobile: updateAdminDto.mobile }],
+        OR: [{ email: updateAdminDto.email }, { username: updateAdminDto.username }, { phone: updateAdminDto.mobile }],
       },
     });
 
@@ -209,7 +209,7 @@ export class AdminsService {
       data: {
         email: updateAdminDto.email ? updateAdminDto.email : data.email,
         username: updateAdminDto.username ? updateAdminDto.username : data.username,
-        mobile: updateAdminDto.mobile ? updateAdminDto.mobile : data.mobile,
+        phone: updateAdminDto.mobile ? updateAdminDto.mobile : data.phone,
         isActive: updateAdminDto.isActive ? updateAdminDto.isActive : data.isActive,
         photo: file ? file.path : data.photo,
         joinedDate: updateAdminDto.joinedDate ? updateAdminDto.joinedDate : data.joinedDate,
@@ -333,7 +333,7 @@ export class AdminsService {
     // check if username or email exists
     return await this._prisma.admin.findFirst({
       where: {
-        OR: [{ email: username }, { username: username }, { mobile: username }],
+        OR: [{ email: username }, { username: username }, { phone: username }],
       },
       include: {
         roles: {

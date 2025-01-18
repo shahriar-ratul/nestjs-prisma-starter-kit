@@ -1,4 +1,4 @@
-import { Global, Injectable } from "@nestjs/common";
+import { BadRequestException, Global, Injectable } from "@nestjs/common";
 
 import { CreateTokenDto } from "../dto/create-token.dto";
 import { PrismaService } from "@/modules/prisma/prisma.service";
@@ -104,15 +104,21 @@ export class TokenService {
   }
 
   async findById(id: number) {
-    return await this._prisma.adminToken.findUnique({
+    const token = await this._prisma.adminToken.findUnique({
       where: {
         id: id,
       },
     });
+
+    if (!token) {
+      throw new BadRequestException("Token not found");
+    }
+
+    return token;
   }
 
   async findByAdminId(adminId: number) {
-    return await this._prisma.adminToken.findMany({
+    const tokens = await this._prisma.adminToken.findMany({
       include: {
         admin: true,
       },
@@ -120,14 +126,26 @@ export class TokenService {
         adminId: adminId,
       },
     });
+
+    if (!tokens) {
+      throw new BadRequestException("Tokens not found");
+    }
+
+    return tokens;
   }
 
   async findByToken(token: string) {
-    return await this._prisma.adminToken.findFirst({
+    const tokenData = await this._prisma.adminToken.findFirst({
       where: {
         token: token,
       },
     });
+
+    if (!tokenData) {
+      throw new BadRequestException("Token not found");
+    }
+
+    return tokenData;
   }
 
   // isRevokedToken
@@ -150,6 +168,16 @@ export class TokenService {
   }
 
   async update(id: number, updateTokenDto: Prisma.AdminTokenUpdateInput) {
+    const tokenData = await this._prisma.adminToken.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!tokenData) {
+      throw new BadRequestException("Token not found");
+    }
+
     return await this._prisma.adminToken.update({
       where: {
         id: id,

@@ -4,7 +4,7 @@ CREATE TABLE "Admin" (
     "firstName" TEXT,
     "lastName" TEXT,
     "dob" TIMESTAMP(3),
-    "mobile" TEXT,
+    "phone" TEXT,
     "username" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "Admin" (
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "verifiedAt" TIMESTAMP(3),
     "verifiedByEmail" BOOLEAN NOT NULL DEFAULT false,
-    "verifiedByMobile" BOOLEAN NOT NULL DEFAULT false,
+    "verifiedByPhone" BOOLEAN NOT NULL DEFAULT false,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -47,7 +47,6 @@ CREATE TABLE "Role" (
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "percentage" DOUBLE PRECISION NOT NULL DEFAULT 0,
 
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
 );
@@ -102,12 +101,12 @@ CREATE TABLE "AdminToken" (
 );
 
 -- CreateTable
-CREATE TABLE "Customer" (
+CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "dob" TIMESTAMP(3) NOT NULL,
-    "mobile" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "photo" TEXT,
@@ -120,13 +119,13 @@ CREATE TABLE "Customer" (
     "deletedBy" INTEGER,
     "deletedAt" TIMESTAMP(3),
 
-    CONSTRAINT "Customer_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "UserToken" (
     "id" SERIAL NOT NULL,
-    "customerId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "token" TEXT NOT NULL,
     "refreshToken" TEXT NOT NULL,
     "ip" TEXT,
@@ -143,7 +142,7 @@ CREATE TABLE "UserToken" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Admin_mobile_key" ON "Admin"("mobile");
+CREATE UNIQUE INDEX "Admin_phone_key" ON "Admin"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
@@ -164,10 +163,10 @@ CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
 CREATE UNIQUE INDEX "Role_slug_key" ON "Role"("slug");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Customer_mobile_key" ON "Customer"("mobile");
+CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Customer_email_key" ON "Customer"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
 ALTER TABLE "PermissionRole" ADD CONSTRAINT "PermissionRole_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -191,4 +190,4 @@ ALTER TABLE "AdminPermission" ADD CONSTRAINT "AdminPermission_permissionId_fkey"
 ALTER TABLE "AdminToken" ADD CONSTRAINT "AdminToken_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserToken" ADD CONSTRAINT "UserToken_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserToken" ADD CONSTRAINT "UserToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

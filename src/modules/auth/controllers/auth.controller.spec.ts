@@ -72,31 +72,7 @@ describe("AuthController", () => {
     };
       
     const expectedResult = {
-      message: "Registered successfully",
-      data: {
-        id: 1,
-        firstName: "Test",
-        lastName: "Admin",
-        username: "testadmin",
-        email: "testadmin@gmail.com",
-        mobile: "1234567890",
-        gender: "male",
-        dob: new Date("2000-01-01"),
-        password: "password",
-        joinedDate: new Date(),
-        isActive: true,
-        photo: null,
-        lastLogin: null,
-        isVerified: false,
-        verifiedAt: null,
-        verifiedByEmail: false,
-        verifiedByMobile: false,
-        deleted: false,
-        deletedBy: null,
-        deletedAt: null,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
+      message: expect.any(String),
     };
     jest.spyOn(authService, 'register').mockResolvedValue(expectedResult);
     const result = await controller.register(admin);
@@ -141,13 +117,11 @@ describe("AuthController", () => {
         password: "password",
       };
       const expectedResult = {
-        message: "Logged in successfully",
-        data: {
-          accessToken: "string",
-          refreshToken: "string",
-          expiresIn: "number",
-        },
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
+        expiresIn: expect.any(Number),
       };
+
       const mockRequest = {
         userAgent: 'test-agent'
       } as unknown as Request;

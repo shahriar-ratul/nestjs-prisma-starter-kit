@@ -1,9 +1,4 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
-import { AuthModule } from "@/modules/auth/auth.module";
-import { PrismaModule } from "@/modules/prisma/prisma.module";
-import { AppModule } from "@/app.module";
 
 describe("AppController (e2e)", () => {
   const authUrl = process.env.BASE_URL + "/api/auth";
@@ -39,7 +34,16 @@ describe("AppController (e2e)", () => {
         password: "password",
       };
 
-      return request(authUrl).post("/login").send(requestBody).expect(401);
+      return request(authUrl)
+        .post("/login")
+        .send(requestBody)
+        .expect((res) => {
+          expect(res.body).toMatchObject({
+            statusCode: 422,
+            success: false,
+            message: "Invalid credentials",
+          });
+        });
     });
 
     it("should return 422", () => {

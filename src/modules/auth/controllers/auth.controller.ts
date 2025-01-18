@@ -18,6 +18,7 @@ import { ApiResponse } from "@nestjs/swagger";
 import { Public } from "@/core/decorator";
 import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth.guard";
 import { Request as TypeRequest } from "express";
+import { Admin } from "@prisma/client";
 
 @Controller({ version: VERSION_NEUTRAL, path: "auth" })
 export class AuthController {
@@ -50,7 +51,11 @@ export class AuthController {
     @Body() credential: LoginDto,
     @Req() request: TypeRequest,
     // @Res({ passthrough: true }) response: Response,
-  ): Promise<any> {
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: number;
+  }> {
     return await this._authService.login(credential, request);
   }
 
@@ -61,7 +66,7 @@ export class AuthController {
     description: "Get Profile Successful",
   })
   @Get("profile")
-  async getProfile(@Req() req: TypeRequest) {
+  async getProfile(@Req() req: TypeRequest): Promise<Admin> {
     return await this._authService.getProfile(req);
   }
 
@@ -72,13 +77,13 @@ export class AuthController {
     description: "Verify Successful",
   })
   @Get("verify")
-  async verify(@Req() req: TypeRequest) {
+  async verify(@Req() req: TypeRequest): Promise<{ message: string }> {
     return await this._authService.verifyToken(req);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("logout")
-  async logout(@Request() req: TypeRequest) {
+  async logout(@Request() req: TypeRequest): Promise<{ message: string }> {
     return await this._authService.logout(req);
   }
 }

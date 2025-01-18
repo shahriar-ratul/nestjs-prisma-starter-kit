@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException, UnprocessableEntityException } from "@nestjs/common";
 import { LoginDto } from "../dto/login.dto";
 import { RegisterDto } from "../dto/register.dto";
 import { PrismaService } from "@/modules/prisma/prisma.service";
@@ -7,6 +7,7 @@ import { JwtService } from "@nestjs/jwt";
 import { TokenService } from "@/modules/auth/services/token.service";
 
 import { Request } from "express";
+import { Admin } from "@prisma/client";
 
 // 1 day in milliseconds
 const EXPIRE_TIME = 1000 * 60 * 60 * 24;
@@ -45,7 +46,7 @@ export class AuthService {
 
     const checkMobile = await this._prisma.admin.findFirst({
       where: {
-        mobile: registerDto.mobile,
+        phone: registerDto.mobile,
       },
     });
 
@@ -60,7 +61,7 @@ export class AuthService {
         firstName: registerDto.firstName,
         lastName: registerDto.lastName,
         dob: registerDto.dob,
-        mobile: registerDto.mobile,
+        phone: registerDto.mobile,
         username: username,
         email: email,
         password: hashedPassword,
@@ -71,28 +72,39 @@ export class AuthService {
     });
 
     return {
-      message: "Register successfully",
-      data: admin,
+      message: "Registered successfully",
     };
   }
 
   async findAdmin(id: number) {
-    return await this._prisma.admin.findFirst({
+    const admin = await this._prisma.admin.findFirst({
       where: {
         id: id,
       },
     });
+
+    if (!admin) {
+      throw new UnprocessableEntityException("Invalid credentials");
+    }
+
+    return admin;
   }
 
-  async findAdminByUsername(username: string) {
-    return await this._prisma.admin.findFirst({
+  async findAdminByUsernameOrEmailOrMobile(username: string) {
+    const admin = await this._prisma.admin.findFirst({
       where: {
-        username: username,
+        OR: [{ username: username }, { email: username }, { phone: username }],
       },
     });
+
+    if (!admin) {
+      throw new UnprocessableEntityException("Invalid credentials");
+    }
+
+    return admin;
   }
 
-  async getPermissions(id: number) {
+  async getPermissions(id: number): Promise<string[]> {
     const admin = await this._prisma.admin.findFirst({
       where: {
         id: id,
@@ -142,8 +154,15 @@ export class AuthService {
     return sortedPermissions;
   }
 
-  async login(credential: LoginDto, request: Request): Promise<any> {
-    const user = await this.findAdminByUsername(credential.username);
+  async login(
+    credential: LoginDto,
+    request: Request,
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: number;
+  }> {
+    const user = await this.findAdminByUsernameOrEmailOrMobile(credential.username);
 
     if (!user) {
       throw new UnauthorizedException("invalid credentials");
@@ -215,8 +234,8 @@ export class AuthService {
     };
   }
 
-  async validateUser(credential: LoginDto) {
-    const user = await this.findAdminByUsername(credential.username);
+  async validateUser(credential: LoginDto): Promise<Admin> {
+    const user = await this.findAdminByUsernameOrEmailOrMobile(credential.username);
 
     if (!user) {
       throw new BadRequestException("invalid credentials");
@@ -233,10 +252,14 @@ export class AuthService {
     return user;
   }
 
-  async getProfile(req: Request): Promise<any> {
+  async getProfile(req: Request): Promise<Admin> {
     try {
       const id = (req.user as any).id as number;
       const user = await this.findAdmin(id);
+
+      if (!user) {
+        throw new BadRequestException("Admin not found");
+      }
 
       return user;
     } catch (error) {
@@ -244,7 +267,7 @@ export class AuthService {
       throw new Error("Invalid Token");
     }
   }
-  async verifyToken(req: Request): Promise<any> {
+  async verifyToken(req: Request): Promise<{ message: string }> {
     const id = (req.user as any).id as number;
     const user = await this.findAdmin(id);
 
@@ -261,7 +284,7 @@ export class AuthService {
     };
   }
 
-  async logout(req: Request): Promise<any> {
+  async logout(req: Request): Promise<{ message: string }> {
     if (!req.headers.authorization) {
       throw new UnauthorizedException("Authorization header is missing");
     }

@@ -41,7 +41,6 @@ async function main() {
           name,
           slug,
           description,
-          percentage: percentage || 0,
         },
       });
 
