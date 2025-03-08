@@ -1,13 +1,13 @@
-import eslint from '@eslint/js';
-import stylisticTs from '@stylistic/eslint-plugin-ts';
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import tsParser from '@typescript-eslint/parser';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import tseslint from 'typescript-eslint';
-import airbnbConfig from 'eslint-config-airbnb-base';
+
 export default [
-  {
+    {
     ignores: [
+      "drizzle.config.ts",
       "**/node_modules/*",
       "**/test-results/*",
       "**/coverage/*",
@@ -20,19 +20,17 @@ export default [
       "*.spec.ts",
       "*.e2e-spec.ts",
       "**/test/*.e2e-spec.ts",
-    ]
+      "**/test/**/*.e2e-spec.ts",
+      "**/test/**/*.spec.ts",
+      "**/test/**"
+    ],
   },
-    eslint.configs.recommended,
+  // { languageOptions: { globals: globals.browser } },
+  pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  {
+   {
     files: ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"],
-    plugins: {
-      "@stylistic/ts": stylisticTs,
-      "simple-import-sort": simpleImportSort,
-      airbnbConfig: airbnbConfig,
-    },
-
     languageOptions: {
       parser: tsParser,
       ecmaVersion: "latest",
@@ -50,12 +48,11 @@ export default [
         }
       ],
       "no-unused-vars": "off",
-      "simple-import-sort/exports": "error",
+      // "no-undef": "off",
+      "simple-import-sort/exports": "off",
       "airbnb-base/arrow-body-style": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "warn",
     },
   },
-  
-
 ];

@@ -6,18 +6,18 @@ import {
   NestModule,
   ValidationError,
   ValidationPipe,
-} from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
-import { PrismaModule } from "./modules/prisma/prisma.module";
-import { MulterModule } from "@nestjs/platform-express";
-import { join } from "path";
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { ConfigModule } from "@nestjs/config";
-import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, Reflector } from "@nestjs/core";
-import { ErrorFilter } from "@/core/filters/error.filter";
-import { ResponseInterceptor } from "@/core/interceptor/response.interceptor";
+} from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, Reflector } from '@nestjs/core';
+import { ErrorFilter } from '@/core/filters/error.filter';
+import { ResponseInterceptor } from '@/core/interceptor/response.interceptor';
 import {
   AllExceptionsFilter,
   BadRequestExceptionFilter,
@@ -25,46 +25,46 @@ import {
   NotFoundExceptionFilter,
   UnauthorizedExceptionFilter,
   ValidationExceptionFilter,
-} from "@/core/filters";
-import { LoggerMiddleware } from "@/core/middleware/logger.middleware";
-import { AuthModule } from "./modules/auth/auth.module";
-import { AdminsModule } from "./modules/admins/admins.module";
-import { RolesModule } from "./modules/roles/roles.module";
-import { PermissionsModule } from "./modules/permissions/permissions.module";
-import { UsersModule } from "./modules/users/users.module";
-import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth.guard";
-import { JwtModule } from "@nestjs/jwt";
-import { RequestLoggerMiddleware } from "@/core/middleware/request-logger.middleware";
+} from '@/core/filters';
+import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
+import { AuthModule } from './modules/auth/auth.module';
+import { AdminsModule } from './modules/admins/admins.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { UsersModule } from './modules/users/users.module';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
+import { JwtModule } from '@nestjs/jwt';
+import { RequestLoggerMiddleware } from '@/core/middleware/request-logger.middleware';
 
 @Module({
   imports: [
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+      envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
     MulterModule.register({
-      dest: process.env.NODE_ENV === "test" ? "./public.test" : "./public",
+      dest: process.env.NODE_ENV === 'test' ? './public.test' : './public',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "..", "public"),
-      exclude: ["/api/(.*)", "/docs"],
-      serveRoot: "/public",
+      rootPath: join(__dirname, '..', '..', 'public'),
+      exclude: ['/api/(.*)', '/docs'],
+      serveRoot: '/public',
     }),
 
     ThrottlerModule.forRoot([
       {
-        name: "short",
+        name: 'short',
         ttl: 1000,
         limit: 3,
       },
       {
-        name: "medium",
+        name: 'medium',
         ttl: 10000,
         limit: 20,
       },
       {
-        name: "long",
+        name: 'long',
         ttl: 60000,
         limit: 100,
       },
@@ -132,7 +132,7 @@ import { RequestLoggerMiddleware } from "@/core/middleware/request-logger.middle
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes("*");
-    consumer.apply(RequestLoggerMiddleware).forRoutes("*");
+    consumer.apply(LoggerMiddleware).forRoutes('{*splat}');
+    consumer.apply(RequestLoggerMiddleware).forRoutes('{*splat}');
   }
 }

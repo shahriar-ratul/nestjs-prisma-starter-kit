@@ -1,16 +1,24 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { config as dotenvConfig } from "dotenv";
-import { Logger, RequestMethod, ValidationPipe, VERSION_NEUTRAL, VersioningType } from "@nestjs/common";
-import { join } from "path";
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { config as dotenvConfig } from 'dotenv';
+import {
+  ConsoleLogger,
+  INestApplication,
+  Logger,
+  RequestMethod,
+  ValidationPipe,
+  VERSION_NEUTRAL,
+  VersioningType,
+} from '@nestjs/common';
+import { join } from 'path';
 
-import * as cookieParser from "cookie-parser";
+import * as cookieParser from 'cookie-parser';
 
-import * as bodyParser from "body-parser";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { NestExpressApplication } from "@nestjs/platform-express";
+import * as bodyParser from 'body-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
 async function bootstrap() {
   // Load environment variables from .env file
@@ -22,28 +30,33 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: false,
+    logger: new ConsoleLogger({
+      json: true,
+      colors: true,
+      depth: 10,
+    }),
   });
 
   app.enableCors({
-    origin: "*",
+    origin: '*',
   });
 
-  const publicPath = join(process.cwd(), "public");
+  const publicPath = join(process.cwd(), 'public');
 
   app.useStaticAssets(publicPath, {
-    prefix: "/public/",
+    prefix: '/public/',
   });
 
   app.use(cookieParser());
-  app.use(bodyParser.json({ limit: "2048mb" }));
-  app.use(bodyParser.urlencoded({ limit: "2048mb", extended: true }));
+  app.use(bodyParser.json({ limit: '2048mb' }));
+  app.use(bodyParser.urlencoded({ limit: '2048mb', extended: true }));
 
-  app.setGlobalPrefix("api", {
+  app.setGlobalPrefix('api', {
     exclude: [
-      { path: "/", method: RequestMethod.GET },
-      { path: "docs", method: RequestMethod.GET },
-      { path: "health", method: RequestMethod.GET },
-      { path: "public/*", method: RequestMethod.GET },
+      { path: '/', method: RequestMethod.GET },
+      { path: 'docs', method: RequestMethod.GET },
+      { path: 'health', method: RequestMethod.GET },
+      { path: 'public/{*splat}', method: RequestMethod.GET },
     ],
   });
 
@@ -57,7 +70,7 @@ async function bootstrap() {
   );
 
   // Enable trust for the proxy
-  app.getHttpAdapter().getInstance().set("trust proxy", true);
+  app.getHttpAdapter().getInstance().set('trust proxy', true);
 
   // Versioning
   app.enableVersioning({
@@ -67,21 +80,21 @@ async function bootstrap() {
 
   // Swagger
   const config = new DocumentBuilder()
-    .setTitle("API Documentation")
-    .setDescription("API description")
-    .setVersion("1.0")
-    .addTag("docs")
+    .setTitle('API Documentation')
+    .setDescription('API description')
+    .setVersion('1.0')
+    .addTag('docs')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup('docs', app, document);
 
   // Etag
-  app.set("etag", false);
+  app.set('etag', false);
 
   app.use((req: Request, res: Response, next: NextFunction) => {
-    res.removeHeader("x-powered-by");
-    res.removeHeader("date");
+    res.removeHeader('x-powered-by');
+    res.removeHeader('date');
 
     next();
   });
