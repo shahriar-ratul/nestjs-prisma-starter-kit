@@ -1,6 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
-import { AppService } from "./app.service";
-import { Public } from "@/core/decorator";
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+import { Public } from '@/core/decorator';
 
 @Controller()
 export class AppController {
@@ -13,8 +13,8 @@ export class AppController {
   }
 
   @Public()
-  @Get("health")
+  @Get('health')
   healthCheck(): string {
-    return "OK";
+    return 'OK';
   }
 }

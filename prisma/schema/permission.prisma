@@ -1,0 +1,34 @@
+model Permission {
+  id        Int               @id @default(autoincrement())
+  name      String            @unique
+  slug      String            @unique
+  group     String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  roles     PermissionRole[]
+  admins    AdminPermission[]
+}
+
+model PermissionRole {
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId       Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@id([permissionId, roleId])
+}
+
+model AdminPermission {
+  permissionId Int
+  adminId      Int
+
+  admin      Admin      @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([adminId, permissionId])
+}

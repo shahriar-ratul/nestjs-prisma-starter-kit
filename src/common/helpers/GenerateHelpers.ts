@@ -1,11 +1,11 @@
-import slugify from "slugify";
+import slugify from 'slugify';
 
-import * as fs from "fs";
+import * as fs from 'fs';
 
 // Generate slug
 export function generateSlug(input: string): string {
   const slug = slugify(input, {
-    replacement: "_",
+    replacement: '_',
     remove: undefined,
     lower: true,
     strict: true,
@@ -47,15 +47,15 @@ export const trimAndCapitalize = (str: string): string => {
   // return capitalizedStr;
 
   // Trim extra spaces and replace consecutive spaces with a single space
-  const trimmedStr = str.trim().replace(/\s+/g, " ");
+  const trimmedStr = str.trim().replace(/\s+/g, ' ');
 
   // Capitalize the first letter of each word
   const capitalizedWords = trimmedStr
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
 
   // Join the capitalized words back into a string
-  const capitalizedStr = capitalizedWords.join(" ");
+  const capitalizedStr = capitalizedWords.join(' ');
 
   return capitalizedStr;
 };
@@ -63,7 +63,7 @@ export const trimAndCapitalize = (str: string): string => {
 // generate random string
 
 export const randomString = (): string => {
-  return String(Date.now().toString(36) + Math.random().toString(16)).replace(/\./g, "");
+  return String(Date.now().toString(36) + Math.random().toString(16)).replace(/\./g, '');
 };
 
 // generate sku code base on year and month with 6 digit number
@@ -78,7 +78,7 @@ export const generateSku = (countSku: number): string => {
   const newCountSku = countSku + 1;
   const numStr = newCountSku.toString();
   // Pad the number with zeros to 5 digits
-  const paddedNumStr = numStr.padStart(5, "0");
+  const paddedNumStr = numStr.padStart(5, '0');
 
   const sku = `${month}${year}${paddedNumStr}`;
   return sku;

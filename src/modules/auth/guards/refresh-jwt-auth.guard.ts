@@ -1,6 +1,6 @@
-import { type CanActivate, type ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import type { Request } from "express";
+import { type CanActivate, type ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import type { Request } from 'express';
 
 @Injectable()
 export class RefreshJwtGuard implements CanActivate {
@@ -16,7 +16,7 @@ export class RefreshJwtGuard implements CanActivate {
         secret: process.env.JWT_REFRESH_TOKEN_KEY,
       });
       // biome-ignore lint/complexity/useLiteralKeys: <explanation>
-      request["user"] = payload;
+      request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
     }
@@ -25,8 +25,8 @@ export class RefreshJwtGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization?.split(" ") ?? [];
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
 
-    return type === "Refresh" ? token : undefined;
+    return type === 'Refresh' ? token : undefined;
   }
 }

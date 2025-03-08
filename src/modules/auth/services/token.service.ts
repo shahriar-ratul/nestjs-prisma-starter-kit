@@ -1,10 +1,10 @@
-import { BadRequestException, Global, Injectable } from "@nestjs/common";
+import { BadRequestException, Global, Injectable } from '@nestjs/common';
 
-import { CreateTokenDto } from "../dto/create-token.dto";
-import { PrismaService } from "@/modules/prisma/prisma.service";
-import { PageDto, PageMetaDto, PageOptionsDto } from "@/core/dto";
-import { AdminToken, Prisma } from "@prisma/client";
-import { format } from "date-fns";
+import { CreateTokenDto } from '../dto/create-token.dto';
+import { PrismaService } from '@/modules/prisma/prisma.service';
+import { PageDto, PageMetaDto, PageOptionsDto } from '@/core/dto';
+import { AdminToken, Prisma } from '@prisma/client';
+import { format } from 'date-fns';
 
 @Global()
 @Injectable()
@@ -15,11 +15,11 @@ export class TokenService {
     const limit: number = query.limit || 10;
     const page: number = query.page || 1;
     const skip: number = (page - 1) * limit;
-    const search = query.search || "";
+    const search = query.search || '';
 
-    const sort = query.sort || "id";
+    const sort = query.sort || 'id';
 
-    const order = query.order || "asc";
+    const order = query.order || 'asc';
 
     // const data = await this._prisma.admin.findMany({
     //   include: {
@@ -83,10 +83,10 @@ export class TokenService {
   async create(createTokenDto: CreateTokenDto) {
     await this._prisma.adminToken.create({
       data: {
-        token: createTokenDto.token || "",
-        refreshToken: createTokenDto.refresh_token || "",
-        ip: createTokenDto.ip || "",
-        userAgent: createTokenDto.userAgent || "",
+        token: createTokenDto.token || '',
+        refreshToken: createTokenDto.refresh_token || '',
+        ip: createTokenDto.ip || '',
+        userAgent: createTokenDto.userAgent || '',
         expiresAt: createTokenDto.expires_at,
         admin: {
           connect: {
@@ -96,7 +96,7 @@ export class TokenService {
       },
     });
 
-    const timeNow = format(new Date(), "yyyy-MM-dd HH:mm:ss a");
+    const timeNow = format(new Date(), 'yyyy-MM-dd HH:mm:ss a');
 
     return {
       message: `Token Created Successfully by Admin ID: ${createTokenDto.admin_id} ip: ${createTokenDto.ip} at time: ${timeNow}`,
@@ -111,7 +111,7 @@ export class TokenService {
     });
 
     if (!token) {
-      throw new BadRequestException("Token not found");
+      throw new BadRequestException('Token not found');
     }
 
     return token;
@@ -128,7 +128,7 @@ export class TokenService {
     });
 
     if (!tokens) {
-      throw new BadRequestException("Tokens not found");
+      throw new BadRequestException('Tokens not found');
     }
 
     return tokens;
@@ -142,7 +142,7 @@ export class TokenService {
     });
 
     if (!tokenData) {
-      throw new BadRequestException("Token not found");
+      throw new BadRequestException('Token not found');
     }
 
     return tokenData;
@@ -175,7 +175,7 @@ export class TokenService {
     });
 
     if (!tokenData) {
-      throw new BadRequestException("Token not found");
+      throw new BadRequestException('Token not found');
     }
 
     return await this._prisma.adminToken.update({
@@ -195,7 +195,7 @@ export class TokenService {
 
     if (!item) {
       return {
-        message: "Token Not Found",
+        message: 'Token Not Found',
       };
     }
 
@@ -215,7 +215,7 @@ export class TokenService {
 
     if (!tokenData) {
       return {
-        message: "Token Not Found",
+        message: 'Token Not Found',
       };
     }
 

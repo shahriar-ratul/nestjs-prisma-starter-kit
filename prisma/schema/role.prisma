@@ -1,0 +1,24 @@
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  permissions PermissionRole[]
+  admins      AdminRole[]
+}
+
+model AdminRole {
+  roleId  Int
+  adminId Int
+  admin   Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  role    Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([adminId, roleId])
+}

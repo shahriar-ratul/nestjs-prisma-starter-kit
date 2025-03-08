@@ -1,14 +1,14 @@
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Import internal files & modules
-import type { IException, IHttpInternalServerErrorExceptionResponse } from "./../interfaces/exceptions.interface";
+import type { IException, IHttpInternalServerErrorExceptionResponse } from './../interfaces/exceptions.interface';
 
 // Exception class for Internal Server Error
 export class InternalServerErrorException extends HttpException {
   @ApiProperty({
     enum: HttpStatus,
-    description: "A unique code identifying the error.",
+    description: 'A unique code identifying the error.',
     example: HttpStatus.INTERNAL_SERVER_ERROR,
   })
   code: number; // Internal status code
@@ -17,28 +17,28 @@ export class InternalServerErrorException extends HttpException {
   cause: Error; // Error object causing the exception
 
   @ApiProperty({
-    description: "Message for the exception",
-    example: "An unexpected error occurred while processing your request.",
+    description: 'Message for the exception',
+    example: 'An unexpected error occurred while processing your request.',
   })
   message: string; // Message for the exception
 
   @ApiProperty({
-    description: "A description of the error message.",
+    description: 'A description of the error message.',
     example:
-      "The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.",
+      'The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.',
   })
   description: string; // Description of the exception
 
   @ApiProperty({
-    description: "Timestamp of the exception",
-    format: "date-time",
-    example: "2022-12-31T23:59:59.999Z",
+    description: 'Timestamp of the exception',
+    format: 'date-time',
+    example: '2022-12-31T23:59:59.999Z',
   })
   timestamp: string; // Timestamp of the exception
 
   @ApiProperty({
-    description: "Trace ID of the request",
-    example: "65b5f773-df95-4ce5-a917-62ee832fcdd0",
+    description: 'Trace ID of the request',
+    example: '65b5f773-df95-4ce5-a917-62ee832fcdd0',
   })
   traceId: string; // Trace ID of the request
 
@@ -57,7 +57,7 @@ export class InternalServerErrorException extends HttpException {
     });
     this.message = exception.message;
     this.cause = exception.cause || new Error(exception.message);
-    this.description = exception.description || "";
+    this.description = exception.description || '';
     this.code = exception.code || 500;
     this.timestamp = new Date().toISOString();
   }
@@ -95,10 +95,10 @@ export class InternalServerErrorException extends HttpException {
   static INTERNAL_SERVER_ERROR = (error: any) => {
     return new InternalServerErrorException({
       message:
-        "We are sorry, something went wrong on our end. Please try again later or contact our support team for assistance.",
+        'We are sorry, something went wrong on our end. Please try again later or contact our support team for assistance.',
       code: HttpStatus.INTERNAL_SERVER_ERROR,
       description:
-        "The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.",
+        'The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.',
       cause: error,
     });
   };
@@ -110,11 +110,11 @@ export class InternalServerErrorException extends HttpException {
    */
   static UNEXPECTED_ERROR = (error: any) => {
     return new InternalServerErrorException({
-      message: "An unexpected error occurred while processing the request.",
+      message: 'An unexpected error occurred while processing the request.',
       code: HttpStatus.INTERNAL_SERVER_ERROR,
       cause: error,
       description:
-        "The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.",
+        'The server encountered an unexpected condition that prevented it from fulfilling the request. This could be due to an error in the application code, a misconfiguration in the server, or an issue with the underlying infrastructure. Please try again later or contact the server administrator if the problem persists.',
     });
   };
 }

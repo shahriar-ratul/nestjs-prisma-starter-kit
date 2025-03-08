@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
-import { Type } from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateTokenDto {
   @IsNotEmpty()
@@ -12,11 +12,11 @@ export class CreateTokenDto {
   @IsNotEmpty()
   refresh_token: string;
 
-  @ApiProperty({ type: "string" })
+  @ApiProperty({ type: 'string' })
   @IsNotEmpty()
   ip: string | null;
 
-  @ApiProperty({ type: "string" })
+  @ApiProperty({ type: 'string' })
   @IsNotEmpty()
   userAgent: string;
 

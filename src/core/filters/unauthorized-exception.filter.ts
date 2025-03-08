@@ -1,8 +1,8 @@
-import { type ArgumentsHost, Catch, type ExceptionFilter, Logger } from "@nestjs/common";
+import { type ArgumentsHost, Catch, type ExceptionFilter, Logger } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <explanation>
-import { HttpAdapterHost } from "@nestjs/core";
+import { HttpAdapterHost } from '@nestjs/core';
 
-import { UnauthorizedException } from "../exceptions/unauthorized.exception";
+import { UnauthorizedException } from '../exceptions/unauthorized.exception';
 
 /**
  * Exception filter to handle unauthorized exceptions

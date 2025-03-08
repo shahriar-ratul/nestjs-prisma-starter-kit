@@ -1,8 +1,8 @@
-import { type ArgumentsHost, Catch, type ExceptionFilter, HttpStatus, Logger } from "@nestjs/common";
+import { type ArgumentsHost, Catch, type ExceptionFilter, HttpStatus, Logger } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <explanation>
-import { HttpAdapterHost } from "@nestjs/core";
-import { ValidationError } from "class-validator";
-import { BadRequestException } from "../exceptions/bad-request.exception";
+import { HttpAdapterHost } from '@nestjs/core';
+import { ValidationError } from 'class-validator';
+import { BadRequestException } from '../exceptions/bad-request.exception';
 
 @Catch(ValidationError)
 export class ValidationExceptionFilter implements ExceptionFilter {
@@ -21,7 +21,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const path = httpAdapter.getRequestUrl(request);
 
     // Create a custom error response
-    const err = BadRequestException.VALIDATION_ERROR("Validation errors occurred");
+    const err = BadRequestException.VALIDATION_ERROR('Validation errors occurred');
     const responseBody = {
       success: false,
       statusCode: httpStatus,
@@ -33,7 +33,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     };
 
     // Log the validation errors and the request path
-    this.logger.verbose(`Validation errors: ${errorMessages.join(", ")}`);
+    this.logger.verbose(`Validation errors: ${errorMessages.join(', ')}`);
     this.logger.verbose(`Request path: ${path}`);
 
     // Send the custom error response

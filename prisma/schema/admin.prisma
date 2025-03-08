@@ -1,0 +1,31 @@
+model Admin {
+  id         Int       @id @default(autoincrement())
+  firstName  String?
+  lastName   String?
+  dob        DateTime?
+  phone      String?   @unique
+  username   String?   @unique
+  email      String    @unique
+  password   String
+  photo      String?
+  joinedDate DateTime  @default(now())
+  gender     String?
+
+  lastLogin  DateTime?
+  isVerified Boolean @default(false)
+  verifiedAt DateTime?
+  verifiedByEmail Boolean @default(false)
+  verifiedByPhone Boolean @default(false)
+  isActive   Boolean @default(true)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  deleted    Boolean   @default(false)
+  deletedBy  Int?
+  deletedAt  DateTime?
+
+  roles       AdminRole[]
+  permissions AdminPermission[]
+  tokens      AdminToken[]
+}

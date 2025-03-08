@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -10,13 +10,13 @@ import {
   IsOptional,
   MaxLength,
   MinLength,
-} from "class-validator";
+} from 'class-validator';
 
 export class CreateAdminDto {
   @ApiProperty({
-    type: "string",
-    example: "admin@admin.com",
-    description: "admin email",
+    type: 'string',
+    example: 'admin@admin.com',
+    description: 'admin email',
   })
   @IsEmail()
   @MaxLength(100)
@@ -24,9 +24,9 @@ export class CreateAdminDto {
   email: string;
 
   @ApiProperty({
-    type: "string",
-    example: "123456",
-    description: "admin password",
+    type: 'string',
+    example: '123456',
+    description: 'admin password',
   })
   @IsNotEmpty()
   @MinLength(6)
@@ -34,9 +34,9 @@ export class CreateAdminDto {
   password: string;
 
   @ApiProperty({
-    type: "string",
-    example: "mobile",
-    description: "admin mobile",
+    type: 'string',
+    example: 'mobile',
+    description: 'admin mobile',
   })
   @IsNotEmpty()
   @MinLength(6)
@@ -44,9 +44,9 @@ export class CreateAdminDto {
   mobile: string;
 
   @ApiProperty({
-    type: "string",
-    example: "admin",
-    description: "admin username",
+    type: 'string',
+    example: 'admin',
+    description: 'admin username',
   })
   @IsNotEmpty()
   @MinLength(3)
@@ -54,9 +54,9 @@ export class CreateAdminDto {
   username: string;
 
   @ApiProperty({
-    type: "string",
-    example: "admin",
-    description: "admin firstName",
+    type: 'string',
+    example: 'admin',
+    description: 'admin firstName',
   })
   @IsNotEmpty()
   @MinLength(3)
@@ -64,9 +64,9 @@ export class CreateAdminDto {
   firstName: string;
 
   @ApiProperty({
-    type: "string",
-    example: "admin",
-    description: "admin lastName",
+    type: 'string',
+    example: 'admin',
+    description: 'admin lastName',
   })
   @IsNotEmpty()
   @MinLength(3)
@@ -74,24 +74,24 @@ export class CreateAdminDto {
   lastName: string;
 
   @ApiProperty({
-    type: "string",
-    example: "true",
-    description: "admin isActive",
+    type: 'string',
+    example: 'true',
+    description: 'admin isActive',
   })
   // @IsNotEmpty()
-  @Transform(({ value }) => value.toString() === "true")
+  @Transform(({ value }) => value.toString() === 'true')
   @IsOptional()
   @IsBoolean()
   isActive: boolean;
 
   // dob
   @ApiProperty({
-    type: "string",
-    example: "2024-01-01",
-    description: "admin dob",
+    type: 'string',
+    example: '2024-01-01',
+    description: 'admin dob',
   })
   @Transform(({ value }) => {
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const date = JSON.parse(value);
       return new Date(date);
     }
@@ -103,12 +103,12 @@ export class CreateAdminDto {
 
   // joinedDate
   @ApiProperty({
-    type: "string",
-    example: "2024-01-01",
-    description: "admin joinedDate",
+    type: 'string',
+    example: '2024-01-01',
+    description: 'admin joinedDate',
   })
   @Transform(({ value }) => {
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const date = JSON.parse(value);
       return new Date(date);
     }
@@ -119,13 +119,13 @@ export class CreateAdminDto {
   joinedDate: Date;
 
   @ApiProperty({
-    type: "array",
-    example: "roles",
-    description: "admin roles",
+    type: 'array',
+    example: 'roles',
+    description: 'admin roles',
     isArray: true,
   })
   @Transform(({ value }) => {
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const roles = JSON.parse(value);
       return roles.map((role: string) => Number(role));
     }
@@ -133,7 +133,7 @@ export class CreateAdminDto {
   })
   @IsArray()
   @ArrayNotEmpty({
-    message: "At least 1 role is required",
+    message: 'At least 1 role is required',
   })
   roles: number[];
 }

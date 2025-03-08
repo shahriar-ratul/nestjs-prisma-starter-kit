@@ -1,5 +1,5 @@
-import { AbilityBuilder, createMongoAbility } from "@casl/ability";
-import { Injectable } from "@nestjs/common";
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AbilityFactory {
@@ -9,10 +9,10 @@ export class AbilityFactory {
     const { can, build } = builder;
     if (permissions.length > 0) {
       for (const permission of permissions) {
-        can(permission, "");
+        can(permission, '');
       }
     } else {
-      can([], "");
+      can([], '');
     }
 
     return build();

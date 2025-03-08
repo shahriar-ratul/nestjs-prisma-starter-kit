@@ -6,8 +6,8 @@ import {
   HttpStatus,
   Logger,
   NotFoundException,
-} from "@nestjs/common";
-import { HttpAdapterHost } from "@nestjs/core";
+} from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 
 /**
  * Catches all exceptions thrown by the application and sends an appropriate HTTP response.

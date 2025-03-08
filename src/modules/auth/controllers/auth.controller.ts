@@ -9,40 +9,40 @@ import {
   UseGuards,
   Request,
   VERSION_NEUTRAL,
-} from "@nestjs/common";
-import { AuthService } from "../services/auth.service";
-import { LoginDto } from "../dto/login.dto";
-import { RegisterDto } from "../dto/register.dto";
-import { SkipThrottle } from "@nestjs/throttler";
-import { ApiResponse } from "@nestjs/swagger";
-import { Public } from "@/core/decorator";
-import { JwtAuthGuard } from "@/modules/auth/guards/jwt-auth.guard";
-import { Request as TypeRequest } from "express";
-import { Admin } from "@prisma/client";
+} from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { SkipThrottle } from '@nestjs/throttler';
+import { ApiResponse } from '@nestjs/swagger';
+import { Public } from '@/core/decorator';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
+import { Request as TypeRequest } from 'express';
+import { Admin } from '@prisma/client';
 
-@Controller({ version: VERSION_NEUTRAL, path: "auth" })
+@Controller({ version: VERSION_NEUTRAL, path: 'auth' })
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post("register")
+  @Post('register')
   register(@Body() registerDto: RegisterDto) {
     return this._authService.register(registerDto);
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post("login")
+  @Post('login')
   @ApiResponse({
     status: 200,
-    description: "Login success Response",
+    description: 'Login success Response',
     example: {
       statusCode: 200,
       success: true,
       data: {
-        accessToken: "string",
-        refreshToken: "string",
-        expiresIn: "number",
+        accessToken: 'string',
+        refreshToken: 'string',
+        expiresIn: 'number',
       },
     },
   })
@@ -63,9 +63,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
-    description: "Get Profile Successful",
+    description: 'Get Profile Successful',
   })
-  @Get("profile")
+  @Get('profile')
   async getProfile(@Req() req: TypeRequest): Promise<Admin> {
     return await this._authService.getProfile(req);
   }
@@ -74,15 +74,15 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
-    description: "Verify Successful",
+    description: 'Verify Successful',
   })
-  @Get("verify")
+  @Get('verify')
   async verify(@Req() req: TypeRequest): Promise<{ message: string }> {
     return await this._authService.verifyToken(req);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("logout")
+  @Post('logout')
   async logout(@Request() req: TypeRequest): Promise<{ message: string }> {
     return await this._authService.logout(req);
   }

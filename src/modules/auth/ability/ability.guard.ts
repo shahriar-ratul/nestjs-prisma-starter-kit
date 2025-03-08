@@ -1,8 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { AbilityFactory } from "./ability.factory";
-import { IS_PUBLIC_KEY } from "@/core/decorator";
-import { AuthService } from "@/modules/auth/services/auth.service";
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { AbilityFactory } from './ability.factory';
+import { IS_PUBLIC_KEY } from '@/core/decorator';
+import { AuthService } from '@/modules/auth/services/auth.service';
 
 @Injectable()
 export class AbilityGuard implements CanActivate {
@@ -36,7 +36,7 @@ export class AbilityGuard implements CanActivate {
     // console.log("user", context.switchToHttp().getRequest().user);
 
     // console.log("ability", ability);
-    const requiredPermissions = this.reflector.get<string[]>("permissions", handler);
+    const requiredPermissions = this.reflector.get<string[]>('permissions', handler);
 
     // console.log("requiredPermissions", requiredPermissions);
 
@@ -47,7 +47,7 @@ export class AbilityGuard implements CanActivate {
     const [action, resource] = requiredPermissions;
 
     if (!ability.can(action, resource)) {
-      throw new ForbiddenException("You do not have permission to access this resource");
+      throw new ForbiddenException('You do not have permission to access this resource');
     }
 
     return true;

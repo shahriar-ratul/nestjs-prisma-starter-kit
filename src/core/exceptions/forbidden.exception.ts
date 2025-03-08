@@ -3,10 +3,10 @@
  */
 
 // Import required modules
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-import type { IException, IHttpForbiddenExceptionResponse } from "./../interfaces/exceptions.interface";
+import type { IException, IHttpForbiddenExceptionResponse } from './../interfaces/exceptions.interface';
 
 /**
  * A custom exception for forbidden errors.
@@ -15,7 +15,7 @@ export class ForbiddenException extends HttpException {
   /** The error code. */
   @ApiProperty({
     enum: HttpStatus,
-    description: "You do not have permission to perform this action.",
+    description: 'You do not have permission to perform this action.',
     example: HttpStatus.FORBIDDEN,
   })
   code: number;
@@ -26,29 +26,29 @@ export class ForbiddenException extends HttpException {
 
   /** The error message. */
   @ApiProperty({
-    description: "Message for the exception",
-    example: "You do not have permission to perform this action.",
+    description: 'Message for the exception',
+    example: 'You do not have permission to perform this action.',
   })
   message: string;
 
   /** The detailed description of the error. */
   @ApiProperty({
-    description: "A description of the error message.",
+    description: 'A description of the error message.',
   })
   description: string;
 
   /** Timestamp of the exception */
   @ApiProperty({
-    description: "Timestamp of the exception",
-    format: "date-time",
-    example: "2022-12-31T23:59:59.999Z",
+    description: 'Timestamp of the exception',
+    format: 'date-time',
+    example: '2022-12-31T23:59:59.999Z',
   })
   timestamp: string;
 
   /** Trace ID of the request */
   @ApiProperty({
-    description: "Trace ID of the request",
-    example: "65b5f773-df95-4ce5-a917-62ee832fcdd0",
+    description: 'Trace ID of the request',
+    example: '65b5f773-df95-4ce5-a917-62ee832fcdd0',
   })
   traceId: string; // Trace ID of the request
 
@@ -68,7 +68,7 @@ export class ForbiddenException extends HttpException {
 
     this.message = exception.message;
     this.cause = exception.cause || new Error(exception.message);
-    this.description = exception.description || "";
+    this.description = exception.description || '';
     this.code = exception.code || 400;
     this.timestamp = new Date().toISOString();
   }
@@ -105,8 +105,8 @@ export class ForbiddenException extends HttpException {
    */
   static FORBIDDEN = (msg?: string) => {
     return new ForbiddenException({
-      message: msg || "Access to this resource is forbidden.",
-      description: "You do not have permission to access this resource.",
+      message: msg || 'Access to this resource is forbidden.',
+      description: 'You do not have permission to access this resource.',
       code: HttpStatus.FORBIDDEN,
     });
   };
@@ -118,8 +118,8 @@ export class ForbiddenException extends HttpException {
    */
   static MISSING_PERMISSIONS = (msg?: string) => {
     return new ForbiddenException({
-      message: msg || "You do not have permission to perform this action.",
-      description: "You do not have the necessary permissions to perform this action.",
+      message: msg || 'You do not have permission to perform this action.',
+      description: 'You do not have the necessary permissions to perform this action.',
       code: HttpStatus.FORBIDDEN,
     });
   };

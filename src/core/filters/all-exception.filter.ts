@@ -1,6 +1,6 @@
-import { type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger } from "@nestjs/common";
+import { type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <explanation>
-import { HttpAdapterHost } from "@nestjs/core";
+import { HttpAdapterHost } from '@nestjs/core';
 
 /**
  * Catches all exceptions thrown by the application and sends an appropriate HTTP response.

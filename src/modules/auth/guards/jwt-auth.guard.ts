@@ -1,19 +1,19 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
-import { Reflector } from "@nestjs/core";
-import { JwtService } from "@nestjs/jwt";
-import { IS_PUBLIC_KEY } from "@/core/decorator";
+import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { IS_PUBLIC_KEY } from '@/core/decorator';
 
-import "dotenv/config";
+import 'dotenv/config';
 
-import { Request } from "express";
-import { TokenService } from "@/modules/auth/services/token.service";
-import { PrismaService } from "@/modules/prisma/prisma.service";
-import { AuthService } from "@/modules/auth/services/auth.service";
+import { Request } from 'express';
+import { TokenService } from '@/modules/auth/services/token.service';
+import { PrismaService } from '@/modules/prisma/prisma.service';
+import { AuthService } from '@/modules/auth/services/auth.service';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard("jwt") {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly tokenService: TokenService,
     private readonly jwtService: JwtService,
@@ -36,7 +36,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       return true;
     }
 
-    const token = request.headers.authorization?.split(" ")[1] || "";
+    const token = request.headers.authorization?.split(' ')[1] || '';
 
     if (!token) {
       throw new UnauthorizedException();
@@ -62,7 +62,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
         }
       }
     } catch (e) {
-      console.log("jwt error", e);
+      console.log('jwt error', e);
       throw new UnauthorizedException();
     }
 

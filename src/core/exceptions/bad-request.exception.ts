@@ -3,15 +3,15 @@
  */
 
 // Import required modules
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-import type { IException, IHttpBadRequestExceptionResponse } from "./../interfaces/exceptions.interface";
+import type { IException, IHttpBadRequestExceptionResponse } from './../interfaces/exceptions.interface';
 
 export class BadRequestException extends HttpException {
   @ApiProperty({
     enum: HttpStatus,
-    description: "A unique code identifying the error.",
+    description: 'A unique code identifying the error.',
     example: HttpStatus.BAD_REQUEST,
   })
   code: number; // Internal status code
@@ -20,27 +20,27 @@ export class BadRequestException extends HttpException {
   cause: Error; // Error object causing the exception
 
   @ApiProperty({
-    description: "Message for the exception",
-    example: "Bad Request",
+    description: 'Message for the exception',
+    example: 'Bad Request',
   })
   message: string; // Message for the exception
 
   @ApiProperty({
-    description: "A description of the error message.",
-    example: "The input provided was invalid",
+    description: 'A description of the error message.',
+    example: 'The input provided was invalid',
   })
   description: string; // Description of the exception
 
   @ApiProperty({
-    description: "Timestamp of the exception",
-    format: "date-time",
-    example: "2022-12-31T23:59:59.999Z",
+    description: 'Timestamp of the exception',
+    format: 'date-time',
+    example: '2022-12-31T23:59:59.999Z',
   })
   timestamp: string; // Timestamp of the exception
 
   @ApiProperty({
-    description: "Trace ID of the request",
-    example: "65b5f773-df95-4ce5-a917-62ee832fcdd0",
+    description: 'Trace ID of the request',
+    example: '65b5f773-df95-4ce5-a917-62ee832fcdd0',
   })
   traceId: string; // Trace ID of the request
 
@@ -59,7 +59,7 @@ export class BadRequestException extends HttpException {
     });
     this.message = exception.message;
     this.cause = exception.cause || new Error(exception.message);
-    this.description = exception.description || "";
+    this.description = exception.description || '';
     this.code = exception.code || 400;
     this.timestamp = new Date().toISOString();
   }
@@ -95,8 +95,8 @@ export class BadRequestException extends HttpException {
    */
   static HTTP_REQUEST_TIMEOUT = () => {
     return new BadRequestException({
-      message: "HTTP Request Timeout",
-      description: "The server timed out while waiting for the request.",
+      message: 'HTTP Request Timeout',
+      description: 'The server timed out while waiting for the request.',
       code: HttpStatus.REQUEST_TIMEOUT,
     });
   };
@@ -108,8 +108,8 @@ export class BadRequestException extends HttpException {
    */
   static RESOURCE_ALREADY_EXISTS = (msg?: string) => {
     return new BadRequestException({
-      message: msg || "Resource Already Exists",
-      description: "The requested resource already exists.",
+      message: msg || 'Resource Already Exists',
+      description: 'The requested resource already exists.',
       code: HttpStatus.BAD_REQUEST,
     });
   };
@@ -121,8 +121,8 @@ export class BadRequestException extends HttpException {
    */
   static RESOURCE_NOT_FOUND = (msg?: string) => {
     return new BadRequestException({
-      message: msg || "Resource Not Found",
-      description: "The requested resource was not found.",
+      message: msg || 'Resource Not Found',
+      description: 'The requested resource was not found.',
       code: HttpStatus.BAD_REQUEST,
     });
   };
@@ -134,8 +134,8 @@ export class BadRequestException extends HttpException {
    */
   static VALIDATION_ERROR = (msg?: string) => {
     return new BadRequestException({
-      message: msg || "Validation Error",
-      description: "Validation Error",
+      message: msg || 'Validation Error',
+      description: 'Validation Error',
       code: HttpStatus.BAD_REQUEST,
     });
   };
@@ -147,8 +147,8 @@ export class BadRequestException extends HttpException {
    */
   static UNEXPECTED = (msg?: string) => {
     return new BadRequestException({
-      message: msg || "Unexpected Error",
-      description: "An unexpected error occurred while processing the request.",
+      message: msg || 'Unexpected Error',
+      description: 'An unexpected error occurred while processing the request.',
       code: HttpStatus.BAD_REQUEST,
     });
   };
@@ -160,8 +160,8 @@ export class BadRequestException extends HttpException {
    */
   static INVALID_INPUT = (msg?: string) => {
     return new BadRequestException({
-      message: msg || "Invalid Input",
-      description: "Invalid Input",
+      message: msg || 'Invalid Input',
+      description: 'Invalid Input',
       code: HttpStatus.BAD_REQUEST,
     });
   };

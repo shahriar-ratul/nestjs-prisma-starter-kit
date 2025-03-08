@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
-import * as request from "supertest";
-import { AppModule } from "./../src/app.module";
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
+import { AppModule } from './../src/app.module';
 
-describe("AppController (e2e)", () => {
+describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,23 +15,23 @@ describe("AppController (e2e)", () => {
     await app.init();
   });
 
-  it("/ (GET)", () => {
+  it('/ (GET)', () => {
     const responseBody = {
       statusCode: 200,
       success: true,
-      data: { message: "Hello World!" },
+      data: { message: 'Hello World!' },
     };
 
-    return request(app.getHttpServer()).get("/").expect(200).expect(responseBody);
+    return request(app.getHttpServer()).get('/').expect(200).expect(responseBody);
   });
 
-  it("/health (GET)", () => {
+  it('/health (GET)', () => {
     const responseBody = {
       statusCode: 200,
       success: true,
-      data: "OK",
+      data: 'OK',
     };
 
-    return request(app.getHttpServer()).get("/health").expect(200).expect(responseBody);
+    return request(app.getHttpServer()).get('/health').expect(200).expect(responseBody);
   });
 });

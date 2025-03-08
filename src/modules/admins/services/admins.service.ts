@@ -1,10 +1,10 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Admin, Prisma } from "@prisma/client";
-import { hash } from "bcrypt";
-import { CreateAdminDto } from "../dto/create-admin.dto";
-import { UpdateAdminDto } from "../dto/update-admin.dto";
-import { PageDto, PageMetaDto, PageOptionsDto } from "./../../../core/dto";
-import { PrismaService } from "./../../prisma/prisma.service";
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Admin, Prisma } from '@prisma/client';
+import { hash } from 'bcrypt';
+import { CreateAdminDto } from '../dto/create-admin.dto';
+import { UpdateAdminDto } from '../dto/update-admin.dto';
+import { PageDto, PageMetaDto, PageOptionsDto } from './../../../core/dto';
+import { PrismaService } from './../../prisma/prisma.service';
 
 @Injectable()
 export class AdminsService {
@@ -15,10 +15,10 @@ export class AdminsService {
     const limit: number = query.limit || 10;
     const page: number = query.page || 1;
     const skip: number = (page - 1) * limit;
-    const search = query.search || "";
+    const search = query.search || '';
 
-    const sort = query.sort || "id";
-    const order = query.order || "asc";
+    const sort = query.sort || 'id';
+    const order = query.order || 'asc';
     const queryData: Prisma.AdminFindManyArgs = {
       where: {
         OR: [{ email: { contains: search } }, { username: { contains: search } }, { phone: { contains: search } }],
@@ -72,7 +72,7 @@ export class AdminsService {
     });
 
     if (checkAdmin) {
-      throw new HttpException("Admin already exists ", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin already exists ', HttpStatus.BAD_REQUEST);
     }
 
     const createPassword = await hash(createAdminDto.password, 15);
@@ -102,7 +102,7 @@ export class AdminsService {
     }
 
     return {
-      message: "Admin Created Successfully",
+      message: 'Admin Created Successfully',
     };
   }
 
@@ -133,7 +133,7 @@ export class AdminsService {
     });
 
     if (!admin) {
-      throw new HttpException("Admin Not Found ", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin Not Found ', HttpStatus.BAD_REQUEST);
     }
 
     const roles = await this._prisma.role.findMany({
@@ -185,7 +185,7 @@ export class AdminsService {
     });
 
     if (!data) {
-      throw new HttpException("Admin Not Found ", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin Not Found ', HttpStatus.BAD_REQUEST);
     }
 
     // check if email or username or mobile exists
@@ -199,7 +199,7 @@ export class AdminsService {
     });
 
     if (checkAdmin) {
-      throw new HttpException("Admin already exists ", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin already exists ', HttpStatus.BAD_REQUEST);
     }
 
     await this._prisma.admin.update({
@@ -250,7 +250,7 @@ export class AdminsService {
     }
 
     return {
-      message: "Admin Updated Successfully",
+      message: 'Admin Updated Successfully',
     };
   }
 
@@ -267,13 +267,13 @@ export class AdminsService {
     });
 
     if (!admin) {
-      throw new HttpException("Admin not found", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin not found', HttpStatus.BAD_REQUEST);
     }
 
     if (admin.roles.length > 0) {
       // superadmin role cannot be deleted
-      if (admin.roles.find((role) => role.role.slug === "superadmin")) {
-        throw new HttpException("SuperAdmin role cannot be deleted", HttpStatus.BAD_REQUEST);
+      if (admin.roles.find((role) => role.role.slug === 'superadmin')) {
+        throw new HttpException('SuperAdmin role cannot be deleted', HttpStatus.BAD_REQUEST);
       }
     }
 
@@ -286,7 +286,7 @@ export class AdminsService {
     });
 
     return {
-      message: "Admin deleted successfully",
+      message: 'Admin deleted successfully',
     };
   }
 
@@ -296,11 +296,11 @@ export class AdminsService {
     });
 
     if (!admin) {
-      throw new HttpException("Admin not found", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin not found', HttpStatus.BAD_REQUEST);
     }
 
-    if (admin.username === "super_admin") {
-      throw new HttpException("SuperAdmin status cannot be changed", HttpStatus.BAD_REQUEST);
+    if (admin.username === 'super_admin') {
+      throw new HttpException('SuperAdmin status cannot be changed', HttpStatus.BAD_REQUEST);
     }
 
     await this._prisma.admin.update({
@@ -313,7 +313,7 @@ export class AdminsService {
     });
 
     return {
-      message: "Status Changed successfully",
+      message: 'Status Changed successfully',
     };
   }
 
@@ -366,7 +366,7 @@ export class AdminsService {
     });
 
     if (!admin) {
-      throw new HttpException("Admin not found", HttpStatus.BAD_REQUEST);
+      throw new HttpException('Admin not found', HttpStatus.BAD_REQUEST);
     }
 
     const roles = await this._prisma.role.findMany({
@@ -398,7 +398,7 @@ export class AdminsService {
     const sortedPermissions = slugPermissions.sort();
 
     return {
-      message: "Permissions fetched successfully",
+      message: 'Permissions fetched successfully',
       permissions: sortedPermissions,
     };
   }
@@ -425,7 +425,7 @@ export class AdminsService {
     });
 
     return {
-      message: "Items fetched successfully",
+      message: 'Items fetched successfully',
       items: items,
     };
   }

@@ -1,5 +1,5 @@
-import { Admin } from "@prisma/client";
-import { Exclude } from "class-transformer";
+import { Admin } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 
 export class AdminEntity {
   id: number;

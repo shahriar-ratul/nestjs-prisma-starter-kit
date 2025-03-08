@@ -1,5 +1,5 @@
-import { Injectable, Logger, NestMiddleware } from "@nestjs/common";
-import { Request, Response, NextFunction, response } from "express";
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction, response } from 'express';
 
 @Injectable()
 export class RequestLoggerMiddleware implements NestMiddleware {
@@ -21,15 +21,15 @@ export class RequestLoggerMiddleware implements NestMiddleware {
       return originalResponseEndRef.apply(res, chunks);
     };
 
-    res.on("finish", () => {
+    res.on('finish', () => {
       const statusCode = res.statusCode;
-      const userAgent = req.get("user-agent") || "";
+      const userAgent = req.get('user-agent') || '';
       const responseTime = new Date().getTime();
       const duration = responseTime - requestStartTime;
 
       try {
-        let body = Buffer.concat(chunkBuffers).toString("utf8");
-        if (body.endsWith("utf8")) {
+        let body = Buffer.concat(chunkBuffers).toString('utf8');
+        if (body.endsWith('utf8')) {
           body = body.slice(0, -4);
         }
 

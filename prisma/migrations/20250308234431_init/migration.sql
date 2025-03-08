@@ -39,6 +39,26 @@ CREATE TABLE "Permission" (
 );
 
 -- CreateTable
+CREATE TABLE "PermissionRole" (
+    "permissionId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PermissionRole_pkey" PRIMARY KEY ("permissionId","roleId")
+);
+
+-- CreateTable
+CREATE TABLE "AdminPermission" (
+    "permissionId" INTEGER NOT NULL,
+    "adminId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AdminPermission_pkey" PRIMARY KEY ("adminId","permissionId")
+);
+
+-- CreateTable
 CREATE TABLE "Role" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -52,16 +72,6 @@ CREATE TABLE "Role" (
 );
 
 -- CreateTable
-CREATE TABLE "PermissionRole" (
-    "permissionId" INTEGER NOT NULL,
-    "roleId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "PermissionRole_pkey" PRIMARY KEY ("permissionId","roleId")
-);
-
--- CreateTable
 CREATE TABLE "AdminRole" (
     "roleId" INTEGER NOT NULL,
     "adminId" INTEGER NOT NULL,
@@ -69,16 +79,6 @@ CREATE TABLE "AdminRole" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "AdminRole_pkey" PRIMARY KEY ("adminId","roleId")
-);
-
--- CreateTable
-CREATE TABLE "AdminPermission" (
-    "permissionId" INTEGER NOT NULL,
-    "adminId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "AdminPermission_pkey" PRIMARY KEY ("adminId","permissionId")
 );
 
 -- CreateTable
@@ -98,47 +98,6 @@ CREATE TABLE "AdminToken" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "AdminToken_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
-    "dob" TIMESTAMP(3) NOT NULL,
-    "phone" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "photo" TEXT,
-    "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "lastLogin" TIMESTAMP(3),
-    "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "deleted" BOOLEAN NOT NULL DEFAULT false,
-    "deletedBy" INTEGER,
-    "deletedAt" TIMESTAMP(3),
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UserToken" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "token" TEXT NOT NULL,
-    "refreshToken" TEXT NOT NULL,
-    "ip" TEXT,
-    "userAgent" TEXT,
-    "expiresAt" TIMESTAMP(3),
-    "isRevoked" BOOLEAN NOT NULL DEFAULT false,
-    "revokedAt" TIMESTAMP(3),
-    "revokedBy" INTEGER,
-    "revokedByIp" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "UserToken_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -162,23 +121,11 @@ CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "Role_slug_key" ON "Role"("slug");
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
 -- AddForeignKey
 ALTER TABLE "PermissionRole" ADD CONSTRAINT "PermissionRole_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PermissionRole" ADD CONSTRAINT "PermissionRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "AdminRole" ADD CONSTRAINT "AdminRole_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "AdminRole" ADD CONSTRAINT "AdminRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "AdminPermission" ADD CONSTRAINT "AdminPermission_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -187,7 +134,10 @@ ALTER TABLE "AdminPermission" ADD CONSTRAINT "AdminPermission_adminId_fkey" FORE
 ALTER TABLE "AdminPermission" ADD CONSTRAINT "AdminPermission_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "AdminToken" ADD CONSTRAINT "AdminToken_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AdminRole" ADD CONSTRAINT "AdminRole_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserToken" ADD CONSTRAINT "UserToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AdminRole" ADD CONSTRAINT "AdminRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AdminToken" ADD CONSTRAINT "AdminToken_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE CASCADE ON UPDATE CASCADE;
